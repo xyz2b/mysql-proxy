@@ -1,0 +1,10 @@
+spring:
+  main:
+    web-application-type: none
+
+node:
+  ip: 192.168.56.1
+  port: 9999
+
+logging:
+  config: classpath:log4j2.xml
