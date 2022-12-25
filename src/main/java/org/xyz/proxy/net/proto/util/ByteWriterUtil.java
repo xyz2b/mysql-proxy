@@ -4,41 +4,53 @@ import io.netty.buffer.ByteBuf;
 
 public class ByteWriterUtil {
     /**
-     * 一次写入一字节的数据（int<1>）
+     * 一次写入一字节的数据（int<1>），无符号整型
      * @param buffer 需要写入的byteBuf
      * @param i 需要写入的数据
      * */
-    public static final void writeUB1(ByteBuf buffer, int i) {
+    public static void writeUB1(ByteBuf buffer, int i) {
         buffer.writeByte((byte) (i & 0xff));
     }
 
     /**
-     * 一次写入二字节的数据（int<2>）
+     * 一次写入二字节的数据（int<2>），无符号整型
      * @param buffer 需要写入的byteBuf
      * @param i 需要写入的数据
      * */
-    public static final void writeUB2(ByteBuf buffer, int i) {
+    public static void writeUB2(ByteBuf buffer, int i) {
         buffer.writeByte((byte) (i & 0xff));
         buffer.writeByte((byte) (i >>> 8));
     }
 
     /**
-     * 一次写入三字节的数据（int<3>）
+     * 一次写入三字节的数据（int<3>），无符号整型
      * @param buffer 需要写入的byteBuf
      * @param i 需要写入的数据
      * */
-    public static final void writeUB3(ByteBuf buffer, int i) {
+    public static void writeUB3(ByteBuf buffer, int i) {
         buffer.writeByte((byte) (i & 0xff));
         buffer.writeByte((byte) (i >>> 8));
         buffer.writeByte((byte) (i >>> 16));
     }
 
     /**
-     * 一次写入四字节的数据（int<4>）
+     * 一次写入四字节的数据（int<4>），无符号整型
      * @param buffer 需要写入的byteBuf
      * @param l 需要写入的数据
      * */
-    public static final void writeUB4(ByteBuf buffer, long l) {
+    public static void writeUB4(ByteBuf buffer, long l) {
+        buffer.writeByte((byte) (l & 0xff));
+        buffer.writeByte((byte) (l >>> 8));
+        buffer.writeByte((byte) (l >>> 16));
+        buffer.writeByte((byte) (l >>> 24));
+    }
+
+    /**
+     * 一次写入四字节的数据（int<4>），有符号整型
+     * @param buffer 需要写入的byteBuf
+     * @param l 需要写入的数据
+     * */
+    public static void writeInt(ByteBuf buffer, int l) {
         buffer.writeByte((byte) (l & 0xff));
         buffer.writeByte((byte) (l >>> 8));
         buffer.writeByte((byte) (l >>> 16));
@@ -47,11 +59,11 @@ public class ByteWriterUtil {
 
 
     /**
-     * 一次写入六字节的数据（int<6>）
+     * 一次写入六字节的数据（int<6>），无符号整型
      * @param buffer 需要写入的byteBuf
      * @param l 需要写入的数据
      * */
-    public static final void writeUB6(ByteBuf buffer, long l) {
+    public static void writeUB6(ByteBuf buffer, long l) {
         buffer.writeByte((byte) (l & 0xff));
         buffer.writeByte((byte) (l >>> 8));
         buffer.writeByte((byte) (l >>> 16));
@@ -61,11 +73,11 @@ public class ByteWriterUtil {
     }
 
     /**
-     * 一次写入八字节的数据（int<8>）
+     * 一次写入八字节的数据（int<8>），有符号整型
      * @param buffer 需要写入的byteBuf
      * @param l 需要写入的数据
      * */
-    public static final void writeUB8(ByteBuf buffer, long l) {
+    public static void writeLong(ByteBuf buffer, long l) {
         buffer.writeByte((byte) (l & 0xff));
         buffer.writeByte((byte) (l >>> 8));
         buffer.writeByte((byte) (l >>> 16));
@@ -81,7 +93,7 @@ public class ByteWriterUtil {
      * @param buffer 需要写入的byteBuf
      * @param l 需要写入的数据
      */
-    public static final void writeLengthEncodedInteger(ByteBuf buffer, long l) {
+    public static void writeLengthEncodedInteger(ByteBuf buffer, long l) {
         if (l < 251) {
             buffer.writeByte((byte) l);
         } else if (l < 0x10000L) {
@@ -92,7 +104,7 @@ public class ByteWriterUtil {
             writeUB3(buffer, (int) l);
         } else {
             buffer.writeByte((byte) 0xFE);
-            writeUB8(buffer, l);
+            writeLong(buffer, l);
         }
     }
 
@@ -101,7 +113,7 @@ public class ByteWriterUtil {
      * @param buffer 需要写入的byteBuf
      * @param src 需要写入的数据
      */
-    public static final void writeStringWithNull(ByteBuf buffer, byte[] src) {
+    public static void writeStringWithNull(ByteBuf buffer, byte[] src) {
         buffer.writeBytes(src);
         buffer.writeByte((byte) 0);
     }
@@ -111,7 +123,7 @@ public class ByteWriterUtil {
      * @param buffer 需要写入的byteBuf
      * @param src 需要写入的数据
      */
-    public static final void writeStringWithLength(ByteBuf buffer, byte[] src) {
+    public static void writeStringWithLength(ByteBuf buffer, byte[] src) {
         int length = src.length;
         if (length < 251) {
             buffer.writeByte((byte) length);
@@ -123,7 +135,7 @@ public class ByteWriterUtil {
             writeUB3(buffer, length);
         } else {
             buffer.writeByte((byte) 0xFE);
-            writeUB8(buffer, length);
+            writeLong(buffer, length);
         }
         buffer.writeBytes(src);
     }

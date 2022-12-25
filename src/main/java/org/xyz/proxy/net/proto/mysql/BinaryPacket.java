@@ -24,8 +24,8 @@ public class BinaryPacket extends MySQLPacket {
     @Override
     public void write(ChannelHandlerContext ctx) {
         ByteBuf byteBuf = ctx.alloc().buffer();
-        ByteWriterUtil.writeUB3(byteBuf, payloadLength);
-        byteBuf.writeByte(sequenceId);
+        ByteWriterUtil.writeUB3(byteBuf, getPayloadLength());
+        byteBuf.writeByte(getSequenceId());
         byteBuf.writeBytes(payload);
         ctx.writeAndFlush(byteBuf);
     }

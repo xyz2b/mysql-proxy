@@ -39,12 +39,12 @@ public class MySqlPacketDecoder extends LengthFieldBasedFrameDecoder  {
             throw new InvalidFrameException(String.format("get packet sequenceId error, packetLength = %d, packetSequenceId = %d", payloadLength, sequenceId));
         }
         BinaryPacket packet = new BinaryPacket();
-        packet.payloadLength = payloadLength;
-        packet.sequenceId = sequenceId;
+        packet.setPayloadLength(payloadLength);
+        packet.setSequenceId(sequenceId);
         // data will not be accessed any more,so we can use this array safely
         packet.payload = in.readBytes(payloadLength).array();
         if (packet.payload == null || packet.payload.length == 0) {
-            throw new InvalidFrameException(String.format("get packet payload error, packetLength = %d, packetSequenceId = %d", packet.payloadLength, packet.sequenceId));
+            throw new InvalidFrameException(String.format("get packet payload error, packetLength = %d, packetSequenceId = %d", packet.getPayloadLength(), packet.getSequenceId()));
         }
 
         log.debug(GsonUtil.pojoToJson(packet));

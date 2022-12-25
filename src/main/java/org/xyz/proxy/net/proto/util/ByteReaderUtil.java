@@ -5,7 +5,7 @@ import org.xyz.proxy.net.proto.mysql.MySQLMessageStream;
 
 public class ByteReaderUtil {
     /**
-     * 一次读取一字节的数据（int<1>）
+     * 一次读取一字节的数据（int<1>），无符号整型
      * @param data Mysql协议数据包数据
      * @return 读取的数据
      * */
@@ -14,7 +14,7 @@ public class ByteReaderUtil {
     }
 
     /**
-     * 一次读取两字节的数据（int<2>）
+     * 一次读取两字节的数据（int<2>），无符号整型
      * @param data Mysql协议数据包数据
      * @return 读取的数据
      * */
@@ -25,7 +25,7 @@ public class ByteReaderUtil {
     }
 
     /**
-     * 一次读取三字节的数据（int<3>）
+     * 一次读取三字节的数据（int<3>），无符号整型
      * @param data Mysql协议数据包数据
      * @return 读取的数据
      * */
@@ -37,12 +37,12 @@ public class ByteReaderUtil {
     }
 
     /**
-     * 一次读取四字节的数据（int<4>）
+     * 一次读取四字节的数据（int<4>），无符号整型
      * @param data Mysql协议数据包数据
      * @return 读取的数据
      * */
-    public static int readUB4(ByteBuf data) {
-        int i = data.readByte() & 0xFF;
+    public static long readUB4(ByteBuf data) {
+        long i = data.readByte() & 0xFF;
         i |= (data.readByte() & 0xFF) << 8;
         i |= (data.readByte() & 0xFF) << 16;
         i |= (long) (data.readByte() & 0xFF) << 24;
@@ -50,7 +50,20 @@ public class ByteReaderUtil {
     }
 
     /**
-     * 一次读取六字节的数据（int<6>）
+     * 一次读取四字节的数据（int<4>），有符号整型
+     * @param data Mysql协议数据包数据
+     * @return 读取的数据
+     * */
+    public static int readInt(ByteBuf data) {
+        int i = data.readByte() & 0xFF;
+        i |= (data.readByte() & 0xFF) << 8;
+        i |= (data.readByte() & 0xFF) << 16;
+        i |= (data.readByte() & 0xFF) << 24;
+        return i;
+    }
+
+    /**
+     * 一次读取六字节的数据（int<6>），无符号整型
      * @param data Mysql协议数据包数据
      * @return 读取的数据
      * */
@@ -64,11 +77,11 @@ public class ByteReaderUtil {
     }
 
     /**
-     * 一次读取八字节的数据（int<8>）
+     * 一次读取八字节的数据（int<8>），有符号整型
      * @param data Mysql协议数据包数据
      * @return 读取的数据
      * */
-    public static long readUB8(ByteBuf data) {
+    public static long readLong(ByteBuf data) {
         long l = (data.readByte() & 0xFF);
         l |= (long) (data.readByte() & 0xFF) << 8;
         l |= (long) (data.readByte() & 0xFF) << 16;
@@ -95,7 +108,7 @@ public class ByteReaderUtil {
             case 0xFD:   // 0xFD + 3-byte integer
                 return readUB3(data);
             case 0xFE:   // 0xFE + 8-byte integer
-                return readUB8(data);
+                return readLong(data);
             default:    // 1-byte integer
                 return length;
         }
@@ -106,7 +119,7 @@ public class ByteReaderUtil {
      * @param length Length-Encoded Integer 类型数据
      * @return Length-Encoded Integer 类型数据的宽度
      */
-    public static final int getLengthWidth(long length) {
+    public static int getLengthWidth(long length) {
         if (length < 251) {
             return 1;
         } else if (length < 0x10000L) {
@@ -123,7 +136,7 @@ public class ByteReaderUtil {
      * @param src LengthEncodedString 类型数据
      * @return LengthEncodedString 类型数据长度的宽度（包含长度值的宽度+String数据宽度）
      */
-    public static final int getLengthWidth(byte[] src) {
+    public static int getLengthWidth(byte[] src) {
         int length = src.length;
         if (length < 251) {
             return 1 + length;

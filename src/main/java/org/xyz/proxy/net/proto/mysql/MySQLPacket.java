@@ -3,9 +3,11 @@ package org.xyz.proxy.net.proto.mysql;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.Data;
 
 import java.nio.ByteBuffer;
 
+@Data
 public abstract class MySQLPacket {
     /**
      * none, this is an internal thread state
@@ -118,8 +120,8 @@ public abstract class MySQLPacket {
 
     public static final byte COM_BINLOG_DUMP = 0x12;
 
-    public int payloadLength;
-    public byte sequenceId = 0;
+    private int payloadLength;
+    private byte sequenceId = 0;
 
     /**
      * 把数据包写到buffer中，如果buffer满了就把buffer通过前端连接写出。
