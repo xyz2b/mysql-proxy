@@ -140,7 +140,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- main方法的地址-->
-                    <mainClass>org.xyz.proxy.mysqlproxy.MysqlProxyApplication</mainClass>
+                    <mainClass>org.xyz.proxy.MysqlProxyApplication</mainClass>
                     <executable>true</executable>
                     <layout>JAR</layout>
                 </configuration>

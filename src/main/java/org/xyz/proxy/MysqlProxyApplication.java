@@ -1,11 +1,11 @@
-package org.xyz.proxy.mysqlproxy;
+package org.xyz.proxy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.xyz.proxy.nettyserver.MysqlServer;
+import org.xyz.proxy.net.server.MysqlServer;
 
 @Configuration
 //自动加载配置信息

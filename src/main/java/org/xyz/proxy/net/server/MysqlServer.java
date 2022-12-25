@@ -1,4 +1,4 @@
-package org.xyz.proxy.nettyserver;
+package org.xyz.proxy.net.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
