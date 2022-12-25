@@ -1,9 +1,9 @@
 package org.xyz.proxy.net.proto.mysql;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 import org.xyz.proxy.net.constants.CapabilitiesFlags;
+import org.xyz.proxy.net.proto.util.DataTranslate;
 
 @Data
 public class HandshakePacket extends MySQLPacket {
@@ -23,7 +23,43 @@ public class HandshakePacket extends MySQLPacket {
     }
 
     public void read(BinaryPacket bin) {
+        setPayloadLength(bin.getPayloadLength());
+        setSequenceId(bin.getSequenceId());
 
+        MySQLMessageStream mm = new MySQLMessageStream(bin.payload);
+        protocolVersion = mm.readUB1();
+        serverVersion = mm.readBytesWithNull();
+        threadId = mm.readUB4();
+
+        byte[] seedPart1 = mm.readBytes(8);
+
+        mm.inc(1);  // filter, 0x00
+        serverCapabilities = mm.readUB2();
+        characterSet = mm.readUB1();
+        serverStatus = mm.readUB2();
+        serverCapabilities = serverCapabilities | mm.readUB2();
+
+        int authPluginDataLen = 0;
+        if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
+            authPluginDataLen = mm.readUB1();
+        } else {
+            mm.inc(1);  // 0x00
+        }
+
+        mm.inc(10);
+
+        byte[] seedPart2 = new byte[0];
+        if(authPluginDataLen > 0) {
+            int seedPart2Length = Math.max(13, authPluginDataLen - 8);
+            seedPart2 = mm.readBytes(seedPart2Length);
+        }
+        if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
+            authPluginName = mm.readBytesWithNull();
+        }
+
+        seed = new byte[seedPart1.length + seedPart2.length];
+        System.arraycopy(seedPart1, 0, seed, 0, seedPart1.length);
+        System.arraycopy(seedPart2, 0, seed, seedPart1.length, seedPart2.length);
     }
 
     public void write(final ChannelHandlerContext ctx) {
