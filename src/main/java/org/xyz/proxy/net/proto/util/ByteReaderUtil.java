@@ -41,12 +41,12 @@ public class ByteReaderUtil {
      * @param data Mysql协议数据包数据
      * @return 读取的数据
      * */
-    public static long readUB4(ByteBuf data) {
-        long l = data.readByte() & 0xFF;
-        l |= (data.readByte() & 0xFF) << 8;
-        l |= (data.readByte() & 0xFF) << 16;
-        l |= (long) (data.readByte() & 0xFF) << 24;
-        return l;
+    public static int readUB4(ByteBuf data) {
+        int i = data.readByte() & 0xFF;
+        i |= (data.readByte() & 0xFF) << 8;
+        i |= (data.readByte() & 0xFF) << 16;
+        i |= (long) (data.readByte() & 0xFF) << 24;
+        return i;
     }
 
     /**
@@ -102,45 +102,37 @@ public class ByteReaderUtil {
     }
 
     /**
-     * 编码 Length-Encoded Integer 类型数据
-     * @param length 长度值
-     * @return 编码后的长度值
+     * 获取 Length-Encoded Integer 类型数据的宽度
+     * @param length Length-Encoded Integer 类型数据
+     * @return Length-Encoded Integer 类型数据的宽度
      */
-    public static byte[] encodedLengthInteger(long length) {
-        byte[] lengthByte = null;
+    public static final int getLengthWidth(long length) {
         if (length < 251) {
-            lengthByte = new byte[1];
-            lengthByte[0] = (byte) (length & 0xFF);
+            return 1;
         } else if (length < 0x10000L) {
-            lengthByte = new byte[3];
-            lengthByte[0] = (byte) 0xFC;
-            lengthByte[1] = (byte) (length & 0xFF);
-            lengthByte[2] = (byte) ((length >> 8) & 0xFF);
+            return 3;
         } else if (length < 0x1000000L) {
-            lengthByte = new byte[4];
-            lengthByte[0] = (byte) 0xFD;
-            lengthByte[1] = (byte) (length & 0xFF);
-            lengthByte[2] = (byte) ((length >> 8) & 0xFF);
-            lengthByte[3] = (byte) ((length >> 16) & 0xFF);
+            return 4;
         } else {
-            lengthByte = new byte[9];
-            lengthByte[0] = (byte) 0xFE;
-            lengthByte[1] = (byte) (length & 0xFF);
-            lengthByte[2] = (byte) ((length >> 8) & 0xFF);
-            lengthByte[3] = (byte) ((length >> 16) & 0xFF);
-            lengthByte[4] = (byte) ((length >> 24) & 0xFF);
-            lengthByte[5] = (byte) ((length >> 32) & 0xFF);
-            lengthByte[6] = (byte) ((length >> 40) & 0xFF);
-            lengthByte[7] = (byte) ((length >> 48) & 0xFF);
-            lengthByte[8] = (byte) ((length >> 56) & 0xFF);
+            return 9;
         }
-        return lengthByte;
     }
 
-    public static void main(String[] args) {
-        byte[] bytes = encodedLengthInteger((long) Math.pow(2, 16));
-        for(byte b : bytes) {
-            System.out.println(Integer.toHexString(b));
+    /**
+     * 获取 LengthEncodedString 类型数据长度的宽度（包含长度值的宽度+String数据宽度）
+     * @param src LengthEncodedString 类型数据
+     * @return LengthEncodedString 类型数据长度的宽度（包含长度值的宽度+String数据宽度）
+     */
+    public static final int getLengthWidth(byte[] src) {
+        int length = src.length;
+        if (length < 251) {
+            return 1 + length;
+        } else if (length < 0x10000L) {
+            return 3 + length;
+        } else if (length < 0x1000000L) {
+            return 4 + length;
+        } else {
+            return 9 + length;
         }
     }
 }

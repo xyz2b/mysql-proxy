@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xyz.proxy.config.NodeConfig;
+import org.xyz.proxy.net.handler.FrontHandlerFactory;
 
 import java.net.InetSocketAddress;
 
@@ -24,7 +25,10 @@ import java.net.InetSocketAddress;
 @Service("MysqlServer")
 public class MysqlServer {
     @Autowired
-    NodeConfig nodeConfig;
+    private NodeConfig nodeConfig;
+
+    @Autowired
+    private FrontHandlerFactory frontHandlerFactory;
 
     // 通过nio方式来接收连接和处理连接
     private EventLoopGroup bg;
@@ -59,41 +63,41 @@ public class MysqlServer {
                 .childOption(NioChannelOption.SO_KEEPALIVE, true);
 
         //5 装配流水线
-        b.childHandler(new ChannelInitializer<SocketChannel>() {
-            //有连接到达时会创建一个channel
-            protected void initChannel(SocketChannel ch) throws Exception {
-                // 管理pipeline中的Handler
-
-            }
-        });
+        b.childHandler(frontHandlerFactory);
 
         // 6 开始绑定server
         // 通过调用sync同步方法阻塞直到绑定成功
         ChannelFuture channelFuture = null;
-        boolean isStart = false;
-        while (!isStart) {
-            try {
-                channelFuture = b.bind().sync();
-                log.info("Server 启动, 端口为： " +
-                        channelFuture.channel().localAddress());
-                isStart = true;
-            } catch (Exception e) {
-                log.error("Server 启动失败端口为：{} msg: {}, 10s后重新启动", ip + ":" + port , e.getMessage());
-                e.printStackTrace();
-                try {
-                    Thread.sleep(10000);
-                }  catch (InterruptedException t) {
-                    t.printStackTrace();
-                }
-            }
+        try {
+            channelFuture = b.bind().sync();
+            log.info("Server 启动, 端口为：{}", channelFuture.channel().localAddress());
+        } catch (Exception e) {
+            log.error("Server 启动失败，端口为：{} msg: {}", ip + ":" + port, e.getMessage());
+            log.error("Exception: ", e);
         }
 
-        //JVM关闭时的钩子函数
+//        boolean isStart = false;
+//        while (!isStart) {
+//            try {
+//                channelFuture = b.bind().sync();
+//                log.info("Server 启动, 端口为：{}", channelFuture.channel().localAddress());
+//                isStart = true;
+//            } catch (Exception e) {
+//                log.error("Server 启动失败端口为：{} msg: {}, 10s后重新启动", ip + ":" + port , e.getMessage());
+//                log.error("Exception: ", e);
+//                try {
+//                    Thread.sleep(10000);
+//                }  catch (InterruptedException t) {
+//                    log.error("Exception: ", t);
+//                }
+//            }
+//        }
+
+        // JVM关闭时的钩子函数
         Runtime.getRuntime().addShutdownHook(
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-
                         // 8 优雅关闭EventLoopGroup，
                         // 释放掉所有资源包括创建的线程
                         wg.shutdownGracefully();
@@ -103,11 +107,9 @@ public class MysqlServer {
         try {
             // 7 监听通道关闭事件
             // 应用程序会一直等待，直到channel关闭
-            ChannelFuture closeFuture =
-                    channelFuture.channel().closeFuture();
+            ChannelFuture closeFuture = channelFuture.channel().closeFuture();
             closeFuture.sync();
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             log.error("发生其他异常", e);
         } finally {
             // 8 优雅关闭EventLoopGroup，

@@ -3,7 +3,7 @@ package org.xyz.proxy.net.proto.mysql;
 // MySQL消息流
 public class MySQLMessageStream {
     public static final long NULL_LENGTH_ENCODED_INTEGER = -1;
-    private static final byte[] EMPTY_BYTES = new byte[0];
+    public static final byte[] EMPTY_BYTES = new byte[0];
 
     // 存储mysql消息流的字节数组
     private final byte[] data;

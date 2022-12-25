@@ -1,0 +1,34 @@
+[30m2022-12-25T12:51:41,399[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 13242 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-25T12:51:41,407[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-25T12:51:42,110[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.136 seconds (JVM running for 2.452)
+[30m2022-12-25T12:51:42,225[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x81ecaa81]'
+[30m2022-12-25T12:51:42,231[m [1;31mERROR [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.MysqlServer[m(MysqlServer.java:75): Server 启动失败端口为：127.0.0.2424:9999 msg: null, 10s后重新启动
+[30m2022-12-25T12:51:42,232[m [1;31mERROR [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.MysqlServer[m(MysqlServer.java:76): Exception: 
+java.nio.channels.UnresolvedAddressException
+	at sun.nio.ch.Net.checkAddress(Net.java:100)
+	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:220)
+	at io.netty.channel.socket.nio.NioServerSocketChannel.doBind(NioServerSocketChannel.java:141)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.bind(AbstractChannel.java:562)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.bind(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeBind(AbstractChannelHandlerContext.java:600)
+	at io.netty.channel.AbstractChannelHandlerContext.bind(AbstractChannelHandlerContext.java:579)
+	at io.netty.channel.DefaultChannelPipeline.bind(DefaultChannelPipeline.java:973)
+	at io.netty.channel.AbstractChannel.bind(AbstractChannel.java:260)
+	at io.netty.bootstrap.AbstractBootstrap$2.run(AbstractBootstrap.java:356)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+[30m2022-12-25T12:51:42,234[m [1;31mERROR [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.MysqlServer[m(MysqlServer.java:113): 发生其他异常
+java.lang.NullPointerException
+	at org.xyz.proxy.net.server.MysqlServer.run(MysqlServer.java:110)
+	at org.xyz.proxy.MysqlProxyApplication.main(MysqlProxyApplication.java:24)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)

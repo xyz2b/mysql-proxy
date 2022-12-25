@@ -11,7 +11,6 @@ import org.xyz.proxy.net.server.MysqlServer;
 //自动加载配置信息
 //使包路径下带有@Value的注解自动注入
 //使包路径下带有@Autowired的类可以自动注入
-@ComponentScan("org.xyz.proxy")
 @SpringBootApplication
 public class MysqlProxyApplication {
 
