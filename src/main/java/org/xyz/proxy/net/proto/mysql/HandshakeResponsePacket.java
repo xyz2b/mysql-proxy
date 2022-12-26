@@ -120,10 +120,16 @@ public class HandshakeResponsePacket extends MySQLPacket {
         size += 1;// character_set
         size += FILLER_23.length;// filler
         size += userName.length() + 1;// username + null
-        size += password.length + ByteReaderUtil.getLengthWidth(password.length);// auth_response + auth_response length width
-        size += database != null ? database.length() + 1 : 0;// database + null
-        size += clientPluginName != null ? clientPluginName.length() + 1 : 0; // client_plugin_name + null
-        size += clientConnectAttrs != null ? ByteReaderUtil.getLengthWidth(clientConnectAttrsLength) + clientConnectAttrsLength : 0; // clientConnectAttrs length width + clientConnectAttrs length
+        size += (password.length + ByteReaderUtil.getLengthWidth(password.length));// auth_response + auth_response length width
+        if ((clientFlag & CapabilitiesFlags.CLIENT_CONNECT_WITH_DB) == CapabilitiesFlags.CLIENT_CONNECT_WITH_DB) {
+            size += (database.length() + 1);// database + null
+        }
+        if ((clientFlag & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
+            size += (clientPluginName.length() + 1); // client_plugin_name + null
+        }
+        if ((clientFlag & CapabilitiesFlags.CLIENT_CONNECT_ATTRS) == CapabilitiesFlags.CLIENT_CONNECT_ATTRS) {
+            size += (ByteReaderUtil.getLengthWidth(clientConnectAttrsLength) + clientConnectAttrsLength); // clientConnectAttrs length width + clientConnectAttrs length
+        }
         return size;
     }
 

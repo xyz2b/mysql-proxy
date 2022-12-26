@@ -3,6 +3,8 @@ package org.xyz.proxy.net.handler.backend;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.xyz.proxy.net.connection.BackendConnection;
 import org.xyz.proxy.net.exception.ErrorPacketException;
 import org.xyz.proxy.net.exception.UnknownPacketException;
 import org.xyz.proxy.net.proto.mysql.*;
@@ -18,11 +20,11 @@ import java.security.NoSuchAlgorithmException;
 public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
     private int state = BackendConnState.BACKEND_HANDSHAKE_RESPONSE_NOT_SEND;
 
-    private static final long CLIENT_FLAGS = getClientFlags();
     private static final long MAX_PACKET_SIZE = 1024 * 1024 * 16;
 
-    public BackendAuthenticator() {
-
+    private BackendConnection backendConnection;
+    public BackendAuthenticator(BackendConnection backendConnection) {
+        this.backendConnection = backendConnection;
     }
 
     @Override
@@ -89,7 +91,7 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
             throws NoSuchAlgorithmException {
         HandshakeResponsePacket hp = new HandshakeResponsePacket();
         hp.setSequenceId(1);
-        hp.setClientFlag(CLIENT_FLAGS);
+        hp.setClientFlag(backendConnection.getClientFlag());
         hp.setMaxPacketSize(MAX_PACKET_SIZE);
         hp.setCharsetIndex(CharacterSet.getIndex("utf8mb4_general_ci"));
         // todo config
@@ -107,30 +109,5 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
         hp.write(ctx);
     }
 
-    /**
-     * 与MySQL连接时的一些特性指定
-     */
-    private static long getClientFlags() {
-        int flag = 0;
-        flag |= CapabilitiesFlags.CLIENT_LONG_PASSWORD;
-        flag |= CapabilitiesFlags.CLIENT_FOUND_ROWS;
-        flag |= CapabilitiesFlags.CLIENT_LONG_FLAG;
-        flag |= CapabilitiesFlags.CLIENT_CONNECT_WITH_DB;
-        // flag |= Capabilities.CLIENT_NO_SCHEMA;
-        // flag |= Capabilities.CLIENT_COMPRESS;
-        flag |= CapabilitiesFlags.CLIENT_ODBC;
-        // flag |= Capabilities.CLIENT_LOCAL_FILES;
-        flag |= CapabilitiesFlags.CLIENT_IGNORE_SPACE;
-        flag |= CapabilitiesFlags.CLIENT_PROTOCOL_41;
-        flag |= CapabilitiesFlags.CLIENT_INTERACTIVE;
-        // flag |= Capabilities.CLIENT_SSL;
-        flag |= CapabilitiesFlags.CLIENT_IGNORE_SIGPIPE;
-        flag |= CapabilitiesFlags.CLIENT_TRANSACTIONS;
-        // flag |= Capabilities.CLIENT_RESERVED;
-        // client extension
-        // 不允许MULTI协议
-        // flag |= Capabilities.CLIENT_MULTI_STATEMENTS;
-        // flag |= Capabilities.CLIENT_MULTI_RESULTS;
-        return flag;
-    }
+
 }

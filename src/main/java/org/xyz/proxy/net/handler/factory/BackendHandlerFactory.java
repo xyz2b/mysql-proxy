@@ -5,34 +5,30 @@ import io.netty.channel.socket.SocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xyz.proxy.net.codec.MySqlPacketDecoder;
-import org.xyz.proxy.net.connection.FrontConnectionFactory;
-import org.xyz.proxy.net.connection.FrontendConnection;
+import org.xyz.proxy.net.handler.backend.BackendAuthenticator;
 import org.xyz.proxy.net.handler.exception.ServerExceptionHandler;
-import org.xyz.proxy.net.handler.frontend.FrontendAuthenticator;
 
-@Service("FrontHandlerFactory")
-public class FrontHandlerFactory extends ChannelInitializer<SocketChannel>  {
+@Service("BackendHandlerFactory")
+public class BackendHandlerFactory extends ChannelInitializer<SocketChannel>  {
     @Autowired
     private ServerExceptionHandler serverExceptionHandler;
 
     @Autowired
     private MySqlPacketDecoder mySqlPacketDecoder;
 
-    private FrontConnectionFactory factory;
+    @Autowired
+    private BackendAuthenticator backendAuthenticator;
 
-    public FrontHandlerFactory() {
-        factory = new FrontConnectionFactory();
+    public BackendHandlerFactory() {
     }
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
-        FrontendConnection frontendConnection = factory.getConnection();
-
         // 空闲连接检测handler，同mysql: wait_timeout参数
         // ch.pipeline().addLast(new IdleStateHandler(10, 10, 10));
         // decode mysql packet depend on it's length
         ch.pipeline().addLast("mySqlPacketDecoder", mySqlPacketDecoder);
-        ch.pipeline().addLast("frontendAuthenticator", new FrontendAuthenticator(frontendConnection));
+        ch.pipeline().addLast("backendAuthenticator", backendAuthenticator);
         ch.pipeline().addLast("serverException", serverExceptionHandler);
     }
 }

@@ -17,7 +17,7 @@ public class HandshakePacket extends MySQLPacket {
     // auth-plugin-data-part1(8字节) + auth-plugin-data-part-2(如果serverCapabilities的CLIENT_PLUGIN_AUTH置位，auth_plugin_data_len-8字节)
     // 总长度等于 auth_plugin_data_len(如果serverCapabilities的CLIENT_PLUGIN_AUTH置位，否则为8字节)
     private byte[] seed;
-    private int serverCapabilities;
+    private long serverCapabilities;
     private int characterSetIndex;
     public int serverStatus;
     private String authPluginName;
@@ -77,10 +77,10 @@ public class HandshakePacket extends MySQLPacket {
         ByteWriterUtil.writeUB4(buffer, threadId);
         ByteWriterUtil.writeBytes(buffer, seed, 0, 8);
         buffer.writeBytes(FILLER_1);
-        ByteWriterUtil.writeUB2(buffer, serverCapabilities & 0xFFFF);
+        ByteWriterUtil.writeUB2(buffer, (int) (serverCapabilities & 0xFFFF));
         ByteWriterUtil.writeUB1(buffer, characterSetIndex);
         ByteWriterUtil.writeUB2(buffer, serverStatus);
-        ByteWriterUtil.writeUB2(buffer, (serverCapabilities >> 16) & 0xFFFF);
+        ByteWriterUtil.writeUB2(buffer, (int) ((serverCapabilities >> 16) & 0xFFFF));
         if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
             ByteWriterUtil.writeUB1(buffer, seed.length);
         } else {
@@ -98,7 +98,7 @@ public class HandshakePacket extends MySQLPacket {
     @Override
     public int calcPacketSize() {
         int size = 1;   // protocol version
-        size += serverVersion.length() + 1; // serverVersion + null
+        size += (serverVersion.length() + 1); // serverVersion + null
         size += 4; // threadId
         size += seed.length; // auth-plugin-data-part-1 + auth-plugin-data-part-2
         size += FILLER_1.length; // filler 0x00
@@ -107,7 +107,9 @@ public class HandshakePacket extends MySQLPacket {
         size += 2; // status_flags
         size += 1;  // auth_plugin_data_len or 0x00
         size += 10; // reserved
-        size += authPluginName != null ? authPluginName.length() + 1 : 0;   // auth_plugin_name + null
+        if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
+            size += (authPluginName.length() + 1);   // auth_plugin_name + null
+        }
         return size;
     }
 
