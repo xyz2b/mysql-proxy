@@ -362,7 +362,7 @@ public class MySQLMessageStream {
      * @param length 读取的字符长度
      * @return 读取的字符串String对象
      */
-    public String readStringWithLength(int length) {
+    public String readStringByLength(int length) {
         if (length <= 0) {
             return null;
         }
@@ -447,7 +447,7 @@ public class MySQLMessageStream {
      * @return 读取的数据
      */
     public BigDecimal readBigDecimal() {
-        String src = readStringWithLength();
+        String src = readString();
         return src == null ? null : new BigDecimal(src);
     }
 

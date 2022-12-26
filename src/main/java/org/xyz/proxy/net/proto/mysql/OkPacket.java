@@ -38,9 +38,9 @@ public class OkPacket extends MySQLPacket {
             warningCount = mm.readUB2();
         }
         if((serverCapabilities & CapabilitiesFlags.CLIENT_SESSION_TRACK) == CapabilitiesFlags.CLIENT_SESSION_TRACK) {
-            info = mm.readStringWithLength();
+            info = mm.readString();
             if((statusFlags & StatusFlags.SERVER_SESSION_STATE_CHANGED) == StatusFlags.SERVER_SESSION_STATE_CHANGED) {
-                sessionStateInfo = mm.readStringWithLength();
+                sessionStateInfo = mm.readString();
             }
         } else {
             info = mm.readString();

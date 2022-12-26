@@ -62,10 +62,10 @@ public class HandshakeResponsePacket extends MySQLPacket {
                 // TODO: 这里存在一个BUG，keyLength可能会超过int的范围
                 int keyLength = (int) mm.readLengthEncodedInteger();
                 int keyLengthWidth = ByteReaderUtil.getLengthWidth(keyLength);
-                String key = mm.readStringWithLength(keyLength);
+                String key = mm.readStringByLength(keyLength);
                 int valueLength = (int) mm.readLengthEncodedInteger();
                 int valueLengthWidth = ByteReaderUtil.getLengthWidth(valueLength);
-                String value = mm.readStringWithLength(valueLength);
+                String value = mm.readStringByLength(valueLength);
                 clientConnectAttrs.put(key, value);
                 readBytes += keyLengthWidth + keyLength + valueLengthWidth + valueLength;
             }

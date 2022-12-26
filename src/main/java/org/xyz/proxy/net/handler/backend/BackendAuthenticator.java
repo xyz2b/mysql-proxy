@@ -52,7 +52,7 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
                 afterSuccess();
                 break;
             case ErrorPacket.PACKET_ID:
-                ErrorPacket err = new ErrorPacket();
+                ErrorPacket err = new ErrorPacket(backendConnection.getClientFlag());
                 err.read(bin);
                 throw new ErrorPacketException("Auth not Okay");
             default:
