@@ -1,4 +1,4 @@
-package org.xyz.proxy.net.handler;
+package org.xyz.proxy.net.handler.exception;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

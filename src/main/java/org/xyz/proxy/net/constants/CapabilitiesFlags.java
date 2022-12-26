@@ -1,5 +1,8 @@
 package org.xyz.proxy.net.constants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CapabilitiesFlags {
     public static final long CLIENT_LONG_PASSWORD = 1;
     public static final long CLIENT_FOUND_ROWS = 2;

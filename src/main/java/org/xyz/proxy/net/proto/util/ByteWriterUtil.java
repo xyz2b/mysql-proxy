@@ -109,11 +109,31 @@ public class ByteWriterUtil {
     }
 
     /**
+     * 写入byte[]数据
+     * @param buffer 需要写入的byteBuf
+     * @param src 需要写入的数据
+     * @param start 需要写入数据的起始索引
+     * @param length 需要写入数据的长度
+     */
+    public static void writeBytes(ByteBuf buffer, byte[] src, int start, int length) {
+        buffer.writeBytes(src, start, length);
+    }
+
+    /**
+     * 写入byte[]数据
+     * @param buffer 需要写入的byteBuf
+     * @param src 需要写入的数据
+     */
+    public static void writeBytes(ByteBuf buffer, byte[] src) {
+        buffer.writeBytes(src);
+    }
+
+    /**
      * 写入 NullTerminatedString 类型数据
      * @param buffer 需要写入的byteBuf
      * @param src 需要写入的数据
      */
-    public static void writeStringWithNull(ByteBuf buffer, byte[] src) {
+    public static void writeBytesWithNull(ByteBuf buffer, byte[] src) {
         buffer.writeBytes(src);
         buffer.writeByte((byte) 0);
     }
@@ -123,7 +143,7 @@ public class ByteWriterUtil {
      * @param buffer 需要写入的byteBuf
      * @param src 需要写入的数据
      */
-    public static void writeStringWithLength(ByteBuf buffer, byte[] src) {
+    public static void writeBytesWithLength(ByteBuf buffer, byte[] src) {
         int length = src.length;
         if (length < 251) {
             buffer.writeByte((byte) length);
@@ -146,11 +166,11 @@ public class ByteWriterUtil {
      * @param nullValue 当写入数据src为null时，需要写入的数据
      * @param src 需要写入的数据
      */
-    public static final void writeStringWithLength(ByteBuf buffer, byte[] src, byte nullValue) {
+    public static final void writeBytesWithLength(ByteBuf buffer, byte[] src, byte nullValue) {
         if (src == null) {
             buffer.writeByte(nullValue);
         } else {
-            writeStringWithLength(buffer, src);
+            writeBytesWithLength(buffer, src);
         }
     }
 }

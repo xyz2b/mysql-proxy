@@ -29,6 +29,10 @@ public class MySQLMessageStream {
         return length;
     }
 
+    /**
+     * 获取当前字节流读取索引
+     * @return 当前字节流读取索引的值
+     * */
     public int current() {
         return position;
     }
@@ -37,26 +41,58 @@ public class MySQLMessageStream {
         return data;
     }
 
-    public void inc(int i) {
-        position += i;
+    /**
+     * 向后移动字节流读取索引
+     * @param step 向后移动的步长
+     * */
+    public void inc(int step) {
+        position += step;
     }
 
-    public void setPosition(int i) {
-        this.position = i;
+    /**
+     * 设置字节流读取索引
+     * @param position 字节流的读取索引
+     * */
+    public void setPosition(int position) {
+        this.position = position;
     }
 
+    /**
+     * 字节流中是否还有数据未读完
+     * @return 字节流中是否还有数据未读完
+     * */
     public boolean hasRemaining() {
         return length > position;
     }
 
+    /**
+     * 一次读取一字节的数据（int<1>），有符号整型，不增加索引
+     * @return 读取的数据
+     * */
     public byte read(int i) {
         return data[i];
     }
 
-    public byte readUB1() {
+    /**
+     * 一次读取一字节的数据（int<1>），有符号整型
+     * @return 读取的数据
+     * */
+    public byte readByte() {
         return data[position++];
     }
 
+    /**
+     * 一次读取一字节的数据（int<1>），无符号整型
+     * @return 读取的数据
+     * */
+    public int readUB1() {
+        return data[position++];
+    }
+
+    /**
+     * 一次读取两字节的数据（int<2>），无符号整型
+     * @return 读取的数据
+     * */
     public int readUB2() {
         final byte[] b = this.data;
         int i = b[position++] & 0xff;
@@ -64,6 +100,10 @@ public class MySQLMessageStream {
         return i;
     }
 
+    /**
+     * 一次读取三字节的数据（int<3>），无符号整型
+     * @return 读取的数据
+     * */
     public int readUB3() {
         final byte[] b = this.data;
         int i = b[position++] & 0xff;
@@ -72,6 +112,10 @@ public class MySQLMessageStream {
         return i;
     }
 
+    /**
+     * 一次读取四字节的数据（int<4>），无符号整型
+     * @return 读取的数据
+     * */
     public long readUB4() {
         final byte[] b = this.data;
         long l = (long) (b[position++] & 0xff);
@@ -81,6 +125,10 @@ public class MySQLMessageStream {
         return l;
     }
 
+    /**
+     * 一次读取四字节的数据（int<4>），有符号整型
+     * @return 读取的数据
+     * */
     public int readInt() {
         final byte[] b = this.data;
         int i = b[position++] & 0xff;
@@ -94,6 +142,25 @@ public class MySQLMessageStream {
         return Float.intBitsToFloat(readInt());
     }
 
+    /**
+     * 一次读取六字节的数据（int<6>），无符号整型
+     * @return 读取的数据
+     * */
+    public long readUB6() {
+        final byte[] b = this.data;
+        long l = (long) (b[position++] & 0xff);
+        l |= (long) (b[position++] & 0xff) << 8;
+        l |= (long) (b[position++] & 0xff) << 16;
+        l |= (long) (b[position++] & 0xff) << 24;
+        l |= (long) (b[position++] & 0xff) << 32;
+        l |= (long) (b[position++] & 0xff) << 40;
+        return l;
+    }
+
+    /**
+     * 一次读取八字节的数据（int<8>），有符号整型
+     * @return 读取的数据
+     * */
     public long readLong() {
         final byte[] b = this.data;
         long l = (long) (b[position++] & 0xff);
@@ -115,7 +182,7 @@ public class MySQLMessageStream {
      * 读取 Length-Encoded Integer 类型数据
      * @return 读取的数据
      */
-    public long readLength() {
+    public long readLengthEncodedInteger() {
         int length = data[position++] & 0xff;
         switch (length) {
             case 0XFB:  // 251，无效数据
@@ -125,6 +192,7 @@ public class MySQLMessageStream {
             case 0xFD:   // 0xFD + 3-byte integer
                 return readUB3();
             case 0xFE:   // 0xFE + 8-byte integer
+                // TODO: 这里存在一个BUG，因为JAVA中没有无符号Long，所以这里读取的length可能是负值
                 return readLong();
             default:    // 1-byte integer
                 return length;
@@ -147,6 +215,7 @@ public class MySQLMessageStream {
 
     /**
      * 读取length长度的剩余未读字节
+     * @param length 读取的字节数
      * @return 读取的数据
      */
     public byte[] readBytes(int length) {
@@ -190,7 +259,8 @@ public class MySQLMessageStream {
      * @return 读取的数据
      */
     public byte[] readBytesWithLength() {
-        int length = (int) readLength();
+        // TODO: 这里存在一个BUG，length可能会超过int的范围
+        int length = (int) readLengthEncodedInteger();
         if (length <= 0) {
             return EMPTY_BYTES;
         }
@@ -215,6 +285,7 @@ public class MySQLMessageStream {
 
     /**
      * 读取EOF结束的字符串，数据包最后一部分的字符串，长度为包长减去当前位置（RestOfPacketString），然后以charset编码格式返回String对象
+     * @param charset 编码
      * @return 读取的字符串String对象
      */
     public String readString(String charset) throws UnsupportedEncodingException {
@@ -256,6 +327,7 @@ public class MySQLMessageStream {
 
     /**
      * 读取以NUL结束的字符串（string<NUL>），然后以charset编码格式返回String对象
+     * @param charset 编码
      * @return 读取的字符串String对象
      */
     public String readStringWithNull(String charset) throws UnsupportedEncodingException {
@@ -287,10 +359,10 @@ public class MySQLMessageStream {
 
     /**
      * 读取长度编码的字符串（LengthEncodedString）
+     * @param length 读取的字符长度
      * @return 读取的字符串String对象
      */
-    public String readStringWithLength() {
-        int length = (int) readLength();
+    public String readStringWithLength(int length) {
         if (length <= 0) {
             return null;
         }
@@ -301,10 +373,27 @@ public class MySQLMessageStream {
 
     /**
      * 读取长度编码的字符串（LengthEncodedString）
+     * @return 读取的字符串String对象
+     */
+    public String readStringWithLength() {
+        // TODO: 这里存在一个BUG，length可能会超过int的范围
+        int length = (int) readLengthEncodedInteger();
+        if (length <= 0) {
+            return null;
+        }
+        String s = new String(data, position, length);
+        position += length;
+        return s;
+    }
+
+    /**
+     * 读取长度编码的字符串（LengthEncodedString）
+     * @param charset 编码
      * @return 读取的字符串String对象，然后以charset编码格式返回String对象
      */
     public String readStringWithLength(String charset) throws UnsupportedEncodingException {
-        int length = (int) readLength();
+        // TODO: 这里存在一个BUG，length可能会超过int的范围
+        int length = (int) readLengthEncodedInteger();
         if (length <= 0) {
             return null;
         }
@@ -332,10 +421,10 @@ public class MySQLMessageStream {
      * @return 读取的数据
      */
     public java.util.Date readDate() {
-        byte length = readUB1();
+        int length = readUB1();
         int year = readUB2();
-        byte month = readUB1();
-        byte date = readUB1();
+        int month = readUB1();
+        int date = readUB1();
         int hour = readUB1();
         int minute = readUB1();
         int second = readUB1();

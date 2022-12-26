@@ -1,22 +1,26 @@
 package org.xyz.proxy.net.proto.mysql;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 import org.xyz.proxy.net.constants.CapabilitiesFlags;
-import org.xyz.proxy.net.proto.util.DataTranslate;
+import org.xyz.proxy.net.proto.util.ByteWriterUtil;
 
 @Data
 public class HandshakePacket extends MySQLPacket {
-    private byte protocolVersion;
-    private byte[] serverVersion;
+    private static final byte[] RESERVED = new byte[10];
+    private static final byte[] FILLER_1 = new byte[1];
+
+    private int protocolVersion;
+    private String serverVersion;
     private long threadId;
     // auth-plugin-data-part1(8字节) + auth-plugin-data-part-2(如果serverCapabilities的CLIENT_PLUGIN_AUTH置位，auth_plugin_data_len-8字节)
     // 总长度等于 auth_plugin_data_len(如果serverCapabilities的CLIENT_PLUGIN_AUTH置位，否则为8字节)
     private byte[] seed;
-    private long serverCapabilities;
-    private byte characterSet;
+    private int serverCapabilities;
+    private int characterSetIndex;
     public int serverStatus;
-    private byte[] authPluginName;
+    private String authPluginName;
 
     public HandshakePacket() {
 
@@ -28,14 +32,14 @@ public class HandshakePacket extends MySQLPacket {
 
         MySQLMessageStream mm = new MySQLMessageStream(bin.payload);
         protocolVersion = mm.readUB1();
-        serverVersion = mm.readBytesWithNull();
+        serverVersion = mm.readStringWithNull();
         threadId = mm.readUB4();
 
         byte[] seedPart1 = mm.readBytes(8);
 
         mm.inc(1);  // filter, 0x00
         serverCapabilities = mm.readUB2();
-        characterSet = mm.readUB1();
+        characterSetIndex = mm.readUB1();
         serverStatus = mm.readUB2();
         serverCapabilities = serverCapabilities | mm.readUB2();
 
@@ -54,7 +58,7 @@ public class HandshakePacket extends MySQLPacket {
             seedPart2 = mm.readBytes(seedPart2Length);
         }
         if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
-            authPluginName = mm.readBytesWithNull();
+            authPluginName = mm.readStringWithNull();
         }
 
         seed = new byte[seedPart1.length + seedPart2.length];
@@ -63,39 +67,52 @@ public class HandshakePacket extends MySQLPacket {
     }
 
     public void write(final ChannelHandlerContext ctx) {
+        // default init 256,so it can avoid buff extract
+        final ByteBuf buffer = ctx.alloc().buffer();
+        ByteWriterUtil.writeUB3(buffer, calcPacketSize());
+        ByteWriterUtil.writeUB1(buffer, getSequenceId());
 
+        ByteWriterUtil.writeUB1(buffer, protocolVersion);
+        ByteWriterUtil.writeBytesWithNull(buffer, serverVersion.getBytes());
+        ByteWriterUtil.writeUB4(buffer, threadId);
+        ByteWriterUtil.writeBytes(buffer, seed, 0, 8);
+        buffer.writeBytes(FILLER_1);
+        ByteWriterUtil.writeUB2(buffer, serverCapabilities & 0xFFFF);
+        ByteWriterUtil.writeUB1(buffer, characterSetIndex);
+        ByteWriterUtil.writeUB2(buffer, serverStatus);
+        ByteWriterUtil.writeUB2(buffer, (serverCapabilities >> 16) & 0xFFFF);
+        if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
+            ByteWriterUtil.writeUB1(buffer, seed.length);
+        } else {
+            ByteWriterUtil.writeUB1(buffer, 0x00);
+        }
+        buffer.writeBytes(RESERVED);
+        ByteWriterUtil.writeBytes(buffer, seed, 8, seed.length);
 
+        if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
+            ByteWriterUtil.writeBytesWithNull(buffer, authPluginName.getBytes());
+        }
+        ctx.writeAndFlush(buffer);
     }
 
     @Override
     public int calcPacketSize() {
         int size = 1;   // protocol version
-        size += serverVersion.length; // serverVersion
-        size += 1;  // serverVersion null
+        size += serverVersion.length() + 1; // serverVersion + null
         size += 4; // threadId
         size += seed.length; // auth-plugin-data-part-1 + auth-plugin-data-part-2
-        size += 1; // filler 0x00
+        size += FILLER_1.length; // filler 0x00
         size += 4; // capability_flags
         size += 1; // character_set
         size += 2; // status_flags
         size += 1;  // auth_plugin_data_len or 0x00
         size += 10; // reserved
-        if(authPluginName != null) {
-            size += authPluginName.length; // auth_plugin_name
-            size += 1; // auth_plugin_name null
-        }
+        size += authPluginName != null ? authPluginName.length() + 1 : 0;   // auth_plugin_name + null
         return size;
     }
 
     @Override
     protected String getPacketInfo() {
         return "MySQL Handshake Packet";
-    }
-
-    public static void main(String[] args) {
-        HandshakePacket handshakePacket = new HandshakePacket();
-        handshakePacket.setServerCapabilities(handshakePacket.getServerCapabilities() | CapabilitiesFlags.CLIENT_PLUGIN_AUTH);
-        System.out.println(handshakePacket.getServerCapabilities() & CapabilitiesFlags.CLIENT_PLUGIN_AUTH);
-        System.out.println(1L << 19);
     }
 }

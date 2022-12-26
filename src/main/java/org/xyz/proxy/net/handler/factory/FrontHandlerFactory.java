@@ -1,12 +1,11 @@
-package org.xyz.proxy.net.handler;
+package org.xyz.proxy.net.handler.factory;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xyz.proxy.net.codec.MySqlPacketDecoder;
+import org.xyz.proxy.net.handler.exception.ServerExceptionHandler;
 
 @Service("FrontHandlerFactory")
 public class FrontHandlerFactory extends ChannelInitializer<SocketChannel>  {

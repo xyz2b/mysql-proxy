@@ -2,9 +2,11 @@ package org.xyz.proxy.net.proto.mysql;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.Data;
 import org.xyz.proxy.net.proto.util.ByteWriterUtil;
 
 // MySql包 外层结构
+@Data
 public class BinaryPacket extends MySQLPacket {
     public static final byte OK = 1;
     public static final byte ERROR = 2;
