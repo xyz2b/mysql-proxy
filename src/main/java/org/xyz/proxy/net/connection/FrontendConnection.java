@@ -1,6 +1,7 @@
 package org.xyz.proxy.net.connection;
 
 import io.netty.channel.Channel;
+import io.netty.util.AttributeKey;
 import lombok.Data;
 import org.xyz.proxy.net.constants.CapabilitiesFlags;
 import org.xyz.proxy.net.constants.CharacterSet;
@@ -8,6 +9,9 @@ import org.xyz.proxy.net.session.FrontendSession;
 
 @Data
 public class FrontendConnection {
+    public static final AttributeKey<FrontendConnection> FRONTEND_CONNECTION =
+            AttributeKey.valueOf("FRONTEND_CONNECTION");
+
     private long id;
 
     private String user;

@@ -56,11 +56,13 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void success(final ChannelHandlerContext ctx) {
+        // 认证通过，将frontendConnection和front channel互相绑定
+        frontendConnection.setFrontChannel(ctx.channel());
+        ctx.channel().attr(FrontendConnection.FRONTEND_CONNECTION).set(frontendConnection);
+
         // AUTH_OK , process command
         ctx.pipeline().replace(this, "frontCommandHandler", new FrontendCommandHandler(frontendConnection));
-        // AUTH_OK is stable
-        ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(OkPacket.AUTH_OK_PACKET);
-
+        // 发送 OK 响应报文
         OkPacket ok = new OkPacket(frontendConnection.getServerCapabilities());
         ok.setSequenceId((byte) 4);
         ok.setAffectedRows(0L);

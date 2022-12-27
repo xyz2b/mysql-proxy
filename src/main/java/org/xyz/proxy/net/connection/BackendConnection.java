@@ -1,12 +1,15 @@
 package org.xyz.proxy.net.connection;
 
 import io.netty.channel.Channel;
+import io.netty.util.AttributeKey;
 import lombok.Data;
 import org.xyz.proxy.net.constants.CapabilitiesFlags;
 import org.xyz.proxy.net.constants.CharacterSet;
 
 @Data
 public class BackendConnection {
+    public static final AttributeKey<BackendConnection> BACKEND_CONNECTION =
+            AttributeKey.valueOf("BACKEND_CONNECTION");
     private long id;
 
     private int charsetIndex;
