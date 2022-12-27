@@ -3,9 +3,8 @@ package org.xyz.proxy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.xyz.proxy.net.server.MysqlServer;
+import org.xyz.proxy.net.server.ProxyServer;
 
 @Configuration
 //自动加载配置信息
@@ -13,14 +12,13 @@ import org.xyz.proxy.net.server.MysqlServer;
 //使包路径下带有@Autowired的类可以自动注入
 @SpringBootApplication
 public class MysqlProxyApplication {
-
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(MysqlProxyApplication.class, args);
 
         /**
          * 启动服务
          */
-        MysqlServer nettyServer = context.getBean(MysqlServer.class);
+        ProxyServer nettyServer = context.getBean(ProxyServer.class);
         nettyServer.run();
     }
 

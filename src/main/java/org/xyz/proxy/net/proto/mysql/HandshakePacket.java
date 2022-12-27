@@ -82,12 +82,12 @@ public class HandshakePacket extends MySQLPacket {
         ByteWriterUtil.writeUB2(buffer, serverStatus);
         ByteWriterUtil.writeUB2(buffer, (int) ((serverCapabilities >> 16) & 0xFFFF));
         if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
-            ByteWriterUtil.writeUB1(buffer, seed.length);
+            ByteWriterUtil.writeUB1(buffer, seed.length + 1);
         } else {
             ByteWriterUtil.writeUB1(buffer, 0x00);
         }
         buffer.writeBytes(RESERVED);
-        ByteWriterUtil.writeBytes(buffer, seed, 8, seed.length);
+        ByteWriterUtil.writeBytesWithNull(buffer, seed, 8, seed.length - 8);
 
         if((serverCapabilities & CapabilitiesFlags.CLIENT_PLUGIN_AUTH) == CapabilitiesFlags.CLIENT_PLUGIN_AUTH) {
             ByteWriterUtil.writeBytesWithNull(buffer, authPluginName.getBytes());
@@ -100,7 +100,7 @@ public class HandshakePacket extends MySQLPacket {
         int size = 1;   // protocol version
         size += (serverVersion.length() + 1); // serverVersion + null
         size += 4; // threadId
-        size += seed.length; // auth-plugin-data-part-1 + auth-plugin-data-part-2
+        size += seed.length + 1; // auth-plugin-data-part-1 + auth-plugin-data-part-2 + null
         size += FILLER_1.length; // filler 0x00
         size += 4; // capability_flags
         size += 1; // character_set

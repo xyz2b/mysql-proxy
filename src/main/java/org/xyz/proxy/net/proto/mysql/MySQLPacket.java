@@ -123,10 +123,7 @@ public abstract class MySQLPacket {
     private int payloadLength;
     private int sequenceId = 0;
 
-    /**
-     * 把数据包写到buffer中，如果buffer满了就把buffer通过前端连接写出。
-     */
-    public ByteBuffer write(ByteBuffer buffer, Channel c) {
+    public void read(BinaryPacket bin) {
         throw new UnsupportedOperationException();
     }
 
@@ -137,9 +134,6 @@ public abstract class MySQLPacket {
         throw new UnsupportedOperationException();
     }
 
-    public ByteBuf writeBuf(ByteBuf buffer, ChannelHandlerContext ctx) {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * 计算数据包大小，不包含包头长度。

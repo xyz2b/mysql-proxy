@@ -1,5 +1,7 @@
 package org.xyz.proxy.net.proto.mysql;
 
+import io.netty.buffer.ByteBuf;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -13,16 +15,14 @@ public class MySQLMessageStream {
     public static final byte[] EMPTY_BYTES = new byte[0];
 
     // 存储mysql消息流的字节数组
-    private final byte[] data;
+    private final ByteBuf data;
     // mysql消息流的长度(Byte，存储mysql消息流的字节数组的大小)
     private final int length;
     // mysql消息流的当前读取索引
-    private int position;
 
-    public MySQLMessageStream(byte[] data) {
+    public MySQLMessageStream(ByteBuf data) {
         this.data = data;
-        this.length = data.length;
-        this.position = 0;
+        this.length = data.readableBytes();
     }
 
     public int length() {
@@ -34,10 +34,10 @@ public class MySQLMessageStream {
      * @return 当前字节流读取索引的值
      * */
     public int current() {
-        return position;
+        return data.readerIndex();
     }
 
-    public byte[] data() {
+    public ByteBuf data() {
         return data;
     }
 
@@ -46,7 +46,7 @@ public class MySQLMessageStream {
      * @param step 向后移动的步长
      * */
     public void inc(int step) {
-        position += step;
+        data.readerIndex(data.readerIndex() + step);
     }
 
     /**
@@ -54,7 +54,7 @@ public class MySQLMessageStream {
      * @param position 字节流的读取索引
      * */
     public void setPosition(int position) {
-        this.position = position;
+        data.readerIndex(position);
     }
 
     /**
@@ -62,7 +62,7 @@ public class MySQLMessageStream {
      * @return 字节流中是否还有数据未读完
      * */
     public boolean hasRemaining() {
-        return length > position;
+        return data.readableBytes() > 0;
     }
 
     /**
@@ -70,7 +70,7 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public byte read(int i) {
-        return data[i];
+        return data.getByte(i);
     }
 
     /**
@@ -78,7 +78,7 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public byte readByte() {
-        return data[position++];
+        return data.readByte();
     }
 
     /**
@@ -86,7 +86,7 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public int readUB1() {
-        return data[position++];
+        return data.readByte() & 0xFF;
     }
 
     /**
@@ -94,9 +94,8 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public int readUB2() {
-        final byte[] b = this.data;
-        int i = b[position++] & 0xff;
-        i |= (b[position++] & 0xff) << 8;
+        int i = data.readByte() & 0xff;
+        i |= (data.readByte() & 0xff) << 8;
         return i;
     }
 
@@ -105,10 +104,9 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public int readUB3() {
-        final byte[] b = this.data;
-        int i = b[position++] & 0xff;
-        i |= (b[position++] & 0xff) << 8;
-        i |= (b[position++] & 0xff) << 16;
+        int i = data.readByte() & 0xff;
+        i |= (data.readByte() & 0xff) << 8;
+        i |= (data.readByte() & 0xff) << 16;
         return i;
     }
 
@@ -117,11 +115,10 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public long readUB4() {
-        final byte[] b = this.data;
-        long l = (long) (b[position++] & 0xff);
-        l |= (long) (b[position++] & 0xff) << 8;
-        l |= (long) (b[position++] & 0xff) << 16;
-        l |= (long) (b[position++] & 0xff) << 24;
+        long l = (long) (data.readByte() & 0xff);
+        l |= (long) (data.readByte() & 0xff) << 8;
+        l |= (long) (data.readByte() & 0xff) << 16;
+        l |= (long) (data.readByte() & 0xff) << 24;
         return l;
     }
 
@@ -130,11 +127,10 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public int readInt() {
-        final byte[] b = this.data;
-        int i = b[position++] & 0xff;
-        i |= (b[position++] & 0xff) << 8;
-        i |= (b[position++] & 0xff) << 16;
-        i |= (b[position++] & 0xff) << 24;
+        int i = data.readByte() & 0xff;
+        i |= (data.readByte() & 0xff) << 8;
+        i |= (data.readByte() & 0xff) << 16;
+        i |= (data.readByte() & 0xff) << 24;
         return i;
     }
 
@@ -147,13 +143,12 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public long readUB6() {
-        final byte[] b = this.data;
-        long l = (long) (b[position++] & 0xff);
-        l |= (long) (b[position++] & 0xff) << 8;
-        l |= (long) (b[position++] & 0xff) << 16;
-        l |= (long) (b[position++] & 0xff) << 24;
-        l |= (long) (b[position++] & 0xff) << 32;
-        l |= (long) (b[position++] & 0xff) << 40;
+        long l = (long) (data.readByte() & 0xff);
+        l |= (long) (data.readByte() & 0xff) << 8;
+        l |= (long) (data.readByte() & 0xff) << 16;
+        l |= (long) (data.readByte() & 0xff) << 24;
+        l |= (long) (data.readByte() & 0xff) << 32;
+        l |= (long) (data.readByte() & 0xff) << 40;
         return l;
     }
 
@@ -162,15 +157,14 @@ public class MySQLMessageStream {
      * @return 读取的数据
      * */
     public long readLong() {
-        final byte[] b = this.data;
-        long l = (long) (b[position++] & 0xff);
-        l |= (long) (b[position++] & 0xff) << 8;
-        l |= (long) (b[position++] & 0xff) << 16;
-        l |= (long) (b[position++] & 0xff) << 24;
-        l |= (long) (b[position++] & 0xff) << 32;
-        l |= (long) (b[position++] & 0xff) << 40;
-        l |= (long) (b[position++] & 0xff) << 48;
-        l |= (long) (b[position++] & 0xff) << 56;
+        long l = (long) (data.readByte() & 0xff);
+        l |= (long) (data.readByte() & 0xff) << 8;
+        l |= (long) (data.readByte() & 0xff) << 16;
+        l |= (long) (data.readByte() & 0xff) << 24;
+        l |= (long) (data.readByte() & 0xff) << 32;
+        l |= (long) (data.readByte() & 0xff) << 40;
+        l |= (long) (data.readByte() & 0xff) << 48;
+        l |= (long) (data.readByte() & 0xff) << 56;
         return l;
     }
 
@@ -183,7 +177,7 @@ public class MySQLMessageStream {
      * @return 读取的数据
      */
     public long readLengthEncodedInteger() {
-        int length = data[position++] & 0xff;
+        int length = data.readByte() & 0xff;
         switch (length) {
             case 0XFB:  // 251，无效数据
                 return MySQLMessageStream.NULL_LENGTH_ENCODED_INTEGER;
@@ -200,16 +194,18 @@ public class MySQLMessageStream {
     }
 
     /**
-     * 读取所有剩余未读字节
+     * 读取所有剩余未读字节string<EOF>
      * @return 读取的数据
      */
     public byte[] readBytes() {
-        if (position >= length) {
+        if (!hasRemaining()) {
             return EMPTY_BYTES;
         }
+        int position = current();
         byte[] ab = new byte[length - position];
-        System.arraycopy(data, position, ab, 0, ab.length);
+        data.getBytes(position, ab);
         position = length;
+        data.readerIndex(position);
         return ab;
     }
 
@@ -219,9 +215,11 @@ public class MySQLMessageStream {
      * @return 读取的数据
      */
     public byte[] readBytes(int length) {
+        int position = current();
         byte[] ab = new byte[length];
-        System.arraycopy(data, position, ab, 0, length);
+        data.getBytes(position, ab);
         position += length;
+        data.readerIndex(position);
         return ab;
     }
 
@@ -230,13 +228,13 @@ public class MySQLMessageStream {
      * @return 读取的数据
      */
     public byte[] readBytesWithNull() {
-        final byte[] b = this.data;
-        if (position >= length) {
+        if (!hasRemaining()) {
             return EMPTY_BYTES;
         }
+        int position = current();
         int offset = -1;
         for (int i = position; i < length; i++) {
-            if (b[i] == 0) {
+            if (data.getByte(i) == 0) {
                 offset = i;
                 break;
             }
@@ -245,11 +243,13 @@ public class MySQLMessageStream {
             return null;
         } else if (offset == position) {    // 空字符串
             position++;
+            data.readerIndex(position);
             return EMPTY_BYTES;
         } else {    // 以0x00结尾的字符串
             byte[] ab2 = new byte[offset - position];
-            System.arraycopy(b, position, ab2, 0, ab2.length);
+            data.getBytes(position, ab2);
             position = offset + 1;
+            data.readerIndex(position);
             return ab2;
         }
     }
@@ -264,9 +264,11 @@ public class MySQLMessageStream {
         if (length <= 0) {
             return EMPTY_BYTES;
         }
+        int position = current();
         byte[] ab = new byte[length];
-        System.arraycopy(data, position, ab, 0, ab.length);
+        data.getBytes(position, ab);
         position += length;
+        data.readerIndex(position);
         return ab;
     }
 
@@ -275,11 +277,15 @@ public class MySQLMessageStream {
      * @return 读取的字符串String对象
      */
     public String readString() {
-        if (position >= length) {
+        if (!hasRemaining()) {
             return null;
         }
-        String s = new String(data, position, length - position);
+        int position = current();
+        byte[] ab = new byte[length - position];
+        data.getBytes(position, ab);
+        String s = new String(ab);
         position = length;
+        data.readerIndex(position);
         return s;
     }
 
@@ -289,11 +295,15 @@ public class MySQLMessageStream {
      * @return 读取的字符串String对象
      */
     public String readString(String charset) throws UnsupportedEncodingException {
-        if (position >= length) {
+        if (!hasRemaining()) {
             return null;
         }
-        String s = new String(data, position, length - position, charset);
+        int position = current();
+        byte[] ab = new byte[length - position];
+        data.getBytes(position, ab);
+        String s = new String(ab);
         position = length;
+        data.readerIndex(position);
         return s;
     }
 
@@ -302,13 +312,13 @@ public class MySQLMessageStream {
      * @return 读取的字符串String对象
      */
     public String readStringWithNull() {
-        final byte[] b = this.data;
-        if (position >= length) {
+        if (!hasRemaining()) {
             return null;
         }
+        int position = current();
         int offset = -1;
         for (int i = position; i < length; i++) {
-            if (b[i] == 0) {
+            if (data.getByte(i) == 0) {
                 offset = i;
                 break;
             }
@@ -317,10 +327,14 @@ public class MySQLMessageStream {
             return null;
         } else if (offset == position) {    // 空字符串
             position++;
+            data.readerIndex(position);
             return null;
         } else {
-            String s = new String(b, position, offset - position);
+            byte[] ab = new byte[offset - position];
+            data.getBytes(position, ab);
+            String s = new String(ab);
             position = offset + 1;
+            data.readerIndex(position);
             return s;
         }
     }
@@ -331,29 +345,30 @@ public class MySQLMessageStream {
      * @return 读取的字符串String对象
      */
     public String readStringWithNull(String charset) throws UnsupportedEncodingException {
-        final byte[] b = this.data;
-        if (position >= length) {
+        if (!hasRemaining()) {
             return null;
         }
+        int position = current();
         int offset = -1;
         for (int i = position; i < length; i++) {
-            if (b[i] == 0) {
+            if (data.getByte(i) == 0) {
                 offset = i;
                 break;
             }
         }
-        switch (offset) {
-            case -1:
-                String s1 = new String(b, position, length - position, charset);
-                position = length;
-                return s1;
-            case 0:
-                position++;
-                return null;
-            default:
-                String s2 = new String(b, position, offset - position, charset);
-                position = offset + 1;
-                return s2;
+        if (offset == -1) { // 读到结尾也没有读到0x00，不合法的字符串，返回null
+            return null;
+        } else if (offset == position) {    // 空字符串
+            position++;
+            data.readerIndex(position);
+            return null;
+        } else {
+            byte[] ab = new byte[offset - position];
+            data.getBytes(position, ab);
+            String s = new String(ab, charset);
+            position = offset + 1;
+            data.readerIndex(position);
+            return s;
         }
     }
 
@@ -366,8 +381,12 @@ public class MySQLMessageStream {
         if (length <= 0) {
             return null;
         }
-        String s = new String(data, position, length);
+        int position = current();
+        byte[] ab = new byte[length];
+        data.getBytes(position, ab);
+        String s = new String(ab);
         position += length;
+        data.readerIndex(position);
         return s;
     }
 
@@ -381,8 +400,12 @@ public class MySQLMessageStream {
         if (length <= 0) {
             return null;
         }
-        String s = new String(data, position, length);
+        int position = current();
+        byte[] ab = new byte[length];
+        data.getBytes(position, ab);
+        String s = new String(ab);
         position += length;
+        data.readerIndex(position);
         return s;
     }
 
@@ -397,8 +420,12 @@ public class MySQLMessageStream {
         if (length <= 0) {
             return null;
         }
-        String s = new String(data, position, length, charset);
+        int position = current();
+        byte[] ab = new byte[length];
+        data.getBytes(position, ab);
+        String s = new String(ab, charset);
         position += length;
+        data.readerIndex(position);
         return s;
     }
 
@@ -449,11 +476,6 @@ public class MySQLMessageStream {
     public BigDecimal readBigDecimal() {
         String src = readString();
         return src == null ? null : new BigDecimal(src);
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder().append(Arrays.toString(data)).toString();
     }
 
     // 单例模式+ThreadLocal的Calendar实例

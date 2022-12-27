@@ -58,7 +58,7 @@ public class HandshakeResponsePacket extends MySQLPacket {
             clientConnectAttrs = new HashMap<>();
             clientConnectAttrsLength = mm.readLengthEncodedInteger();
             int readBytes = 0;
-            while (readBytes <= clientConnectAttrsLength) {
+            while (readBytes < clientConnectAttrsLength) {
                 // TODO: 这里存在一个BUG，keyLength可能会超过int的范围
                 int keyLength = (int) mm.readLengthEncodedInteger();
                 int keyLengthWidth = ByteReaderUtil.getLengthWidth(keyLength);

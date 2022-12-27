@@ -139,6 +139,18 @@ public class ByteWriterUtil {
     }
 
     /**
+     * 写入 NullTerminatedString 类型数据
+     * @param buffer 需要写入的byteBuf
+     * @param src 需要写入的数据
+     * @param start 需要写入数据的起始索引
+     * @param length 需要写入数据的长度
+     */
+    public static void writeBytesWithNull(ByteBuf buffer, byte[] src, int start, int length) {
+        buffer.writeBytes(src, start, length);
+        buffer.writeByte((byte) 0);
+    }
+
+    /**
      * 写入 LengthEncodedString 类型数据
      * @param buffer 需要写入的byteBuf
      * @param src 需要写入的数据

@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SecurityUtil {
 
+    // mysql_native_password
     public static final byte[] scramble411(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         byte[] pass1 = md.digest(pass);
@@ -74,4 +75,10 @@ public class SecurityUtil {
         return result;
     }
 
+    // TODO: caching_sha2_password
+
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        byte[] seed = new byte[] {0x2e, 0x0c, 0x2e, 0x22, 0x2d, 0x35, 0x37, 0x18, 0x28, 0x37, 0x1c, 0x20, 0x54, 0x4d, 0x74, 0x46, 0x7b, 0x2f, 0x60, 0x70};
+        SecurityUtil.scramble411("test".getBytes(), seed);
+    }
 }

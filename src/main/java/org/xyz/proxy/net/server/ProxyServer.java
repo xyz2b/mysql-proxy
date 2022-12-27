@@ -13,17 +13,17 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xyz.proxy.config.NodeConfig;
+import org.xyz.proxy.config.ProxyConfig;
 import org.xyz.proxy.net.handler.factory.FrontHandlerFactory;
 
 import java.net.InetSocketAddress;
 
 @Data
 @Slf4j
-@Service("MysqlServer")
-public class MysqlServer {
+@Service("ProxyServer")
+public class ProxyServer {
     @Autowired
-    private NodeConfig nodeConfig;
+    private ProxyConfig proxyConfig;
 
     @Autowired
     private FrontHandlerFactory frontHandlerFactory;
@@ -36,8 +36,8 @@ public class MysqlServer {
     private ServerBootstrap b = new ServerBootstrap();
 
     public void run() {
-        String ip = nodeConfig.getIp();
-        int port = nodeConfig.getPort();
+        String ip = proxyConfig.getIp();
+        int port = proxyConfig.getPort();
 
         //连接监听线程组
         bg = new NioEventLoopGroup(1);

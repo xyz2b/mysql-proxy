@@ -10,8 +10,8 @@ import org.xyz.proxy.net.proto.util.ByteWriterUtil;
 public class OkPacket extends MySQLPacket {
     public static final byte PACKET_ID = (byte) 0x00;
 
-    public static final byte[] OK = new byte[] { 7, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0 };
-    public static final byte[] AUTH_OK = new byte[] { 7, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 };
+    public static final byte[] OK_PACKET = new byte[] { 7, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0 };
+    public static final byte[] AUTH_OK_PACKET = new byte[] { 7, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 };
 
     private byte header = PACKET_ID;
     private long affectedRows;

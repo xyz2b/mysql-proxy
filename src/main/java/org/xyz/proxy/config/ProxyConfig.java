@@ -6,10 +6,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Data
-public class NodeConfig {
-    @Value("${node.ip}")
+public class ProxyConfig {
+    @Value("${proxy.ip}")
     private String ip;
 
-    @Value("${node.port}")
+    @Value("${proxy.port}")
     private int port;
+
+    @Value("${proxy.default-auth-plugin}")
+    private String defaultAuthPlugin;
 }

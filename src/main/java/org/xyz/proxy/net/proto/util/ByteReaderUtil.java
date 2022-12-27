@@ -94,6 +94,15 @@ public class ByteReaderUtil {
     }
 
     /**
+     * 一次读取length字节的数据
+     * @param data Mysql协议数据包数据
+     * @return 读取的数据
+     * */
+    public static ByteBuf readBytes(ByteBuf data, int length) {
+        return data.readBytes(length);
+    }
+
+    /**
      * 读取 Length-Encoded Integer 类型数据
      * @param data Mysql协议数据包数据
      * @return 读取的数据

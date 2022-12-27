@@ -1,10 +1,13 @@
 package org.xyz.proxy.net.handler.frontend;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xyz.proxy.config.ProxyConfig;
 import org.xyz.proxy.net.connection.FrontendConnection;
 import org.xyz.proxy.net.constants.*;
 import org.xyz.proxy.net.proto.mysql.BinaryPacket;
@@ -23,8 +26,11 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
 
     private FrontendConnection frontendConnection;
 
-    public FrontendAuthenticator(FrontendConnection frontendConnection) {
+    private ProxyConfig proxyConfig;
+
+    public FrontendAuthenticator(FrontendConnection frontendConnection, ProxyConfig proxyConfig) {
         this.frontendConnection = frontendConnection;
+        this.proxyConfig = proxyConfig;
     }
 
     // 发送 握手初始化请求
@@ -50,7 +56,7 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
         hs.setServerCapabilities(frontendConnection.getServerCapabilities());
         hs.setCharacterSetIndex(CharacterSet.getIndex("utf8mb4_general_ci"));
         hs.setServerStatus(StatusFlags.SERVER_STATUS_AUTOCOMMIT);
-        hs.setAuthPluginName(AuthPluginName.MYSQL_NATIVE_PASSWORD);
+        hs.setAuthPluginName(proxyConfig.getDefaultAuthPlugin());
         hs.write(ctx);
     }
 
@@ -60,28 +66,35 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
         BinaryPacket bin = (BinaryPacket) msg;
         HandshakeResponsePacket hsp = new HandshakeResponsePacket();
         hsp.read(bin);
+
+        frontendConnection.setClientCapabilities(hsp.getClientFlag());
+        frontendConnection.setUser(hsp.getUserName());
+
+        if(hsp.getUserName().equals("test")) {  // test用户的密码是使用和client auth plugin不同的算法进行加密的，需要进行 auth switch，服务端发送 auth switch request
+            ctx.pipeline().replace(this, "FrontendAuthSwitchHandler", new FrontendAuthSwitchHandler(frontendConnection, proxyConfig));
+            return;
+        }
         // check password
         if (!checkPassword(hsp.getPassword(), hsp.getUserName())) {
             failure(ErrorCode.ER_ACCESS_DENIED_ERROR, "Access denied for user '" + hsp.getUserName() + "'");
             ctx.close();
             return;
         }
-        frontendConnection.setClientCapabilities(hsp.getClientFlag());
         success(ctx);
     }
 
     private void success(final ChannelHandlerContext ctx) {
         // AUTH_OK , process command
-        ctx.pipeline().replace(this, "frontCommandHandler", new FrontendCommandHandler());
+        ctx.pipeline().replace(this, "frontCommandHandler", new FrontendCommandHandler(frontendConnection));
         // AUTH_OK is stable
-        ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(OkPacket.AUTH_OK);
+        ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(OkPacket.AUTH_OK_PACKET);
         // just io , no need thread pool
         ctx.writeAndFlush(byteBuf);
     }
 
     protected boolean checkPassword(byte[] password, String user) {
         // todo config
-        String pass = "test1";
+        String pass = "test";
 
         // check null
         if (pass == null || pass.length() == 0) {
@@ -120,6 +133,4 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
     protected void failure(int errno, String info) {
         log.error(info);
     }
-
-
 }

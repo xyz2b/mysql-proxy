@@ -1,16 +1,15 @@
 package org.xyz.proxy.net.handler.backend;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.xyz.proxy.net.connection.BackendConnection;
 import org.xyz.proxy.net.exception.ErrorPacketException;
 import org.xyz.proxy.net.exception.UnknownPacketException;
 import org.xyz.proxy.net.proto.mysql.*;
 import org.xyz.proxy.net.proto.util.SecurityUtil;
 import org.xyz.proxy.net.constants.BackendConnState;
-import org.xyz.proxy.net.constants.CapabilitiesFlags;
 import org.xyz.proxy.net.constants.CharacterSet;
 
 import java.security.NoSuchAlgorithmException;
@@ -46,7 +45,7 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
 
     private void authOk(ChannelHandlerContext ctx, Object msg) {
         BinaryPacket bin = (BinaryPacket) msg;
-        int responsePacketId = bin.getPayload()[0];
+        int responsePacketId = bin.getPayload().getByte(0);
         switch (responsePacketId) {
             case OkPacket.PACKET_ID:
                 afterSuccess();
@@ -60,7 +59,7 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
         }
 
         // replace the commandHandler of Authenticator
-        ctx.pipeline().replace(this, "BackendCommandHandler", new BackendCommandHandler());
+        ctx.pipeline().replace(this, "BackendCommandHandler", new BackendCommandHandler(backendConnection));
     }
 
     /**

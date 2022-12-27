@@ -16,11 +16,11 @@ public class BinaryPacket extends MySQLPacket {
     public static final byte ROW = 6;
     public static final byte PACKET_EOF = 7;
 
-    public byte[] payload;
+    public ByteBuf payload;
 
     @Override
     public int calcPacketSize() {
-        return payload == null ? 0 : payload.length;
+        return payload == null ? 0 : payload.readableBytes();
     }
 
     @Override
