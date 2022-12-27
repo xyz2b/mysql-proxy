@@ -29,6 +29,7 @@ public class AuthSwitchRequest extends MySQLPacket {
         ByteWriterUtil.writeUB3(buffer, calcPacketSize());
         ByteWriterUtil.writeUB1(buffer, getSequenceId());
 
+        ByteWriterUtil.writeUB1(buffer, statusFlag);
         ByteWriterUtil.writeBytesWithNull(buffer, pluginName.getBytes());
         ByteWriterUtil.writeBytesWithNull(buffer, seed);
         ctx.writeAndFlush(buffer);

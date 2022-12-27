@@ -2,9 +2,11 @@ package org.xyz.proxy.net.proto.mysql;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.Data;
 import org.xyz.proxy.net.constants.CapabilitiesFlags;
 import org.xyz.proxy.net.proto.util.ByteWriterUtil;
 
+@Data
 public class ErrorPacket extends MySQLPacket {
     public static final byte PACKET_ID = (byte) 0xff;
 

@@ -33,3 +33,42 @@ java.lang.NullPointerException
 [30m2022-12-27T15:26:12,296[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthenticator[m(FrontendAuthenticator.java:127): Access denied for user 'test1'
 [30m2022-12-27T15:26:58,596[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthenticator[m(FrontendAuthenticator.java:127): Access denied for user 'test1'
 [30m2022-12-27T15:36:25,521[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthenticator[m(FrontendAuthenticator.java:127): Access denied for user 'test1'
+[30m2022-12-27T17:10:58,728[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthenticator[m(FrontendAuthenticator.java:134): Access denied for user 'test1'
+[30m2022-12-27T17:26:46,464[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.exception.ServerExceptionHandler[m(ServerExceptionHandler.java:22): Throwable: 
+java.io.IOException: Connection reset by peer
+	at sun.nio.ch.FileDispatcherImpl.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:39)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:378)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:259)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+[30m2022-12-27T17:40:01,999[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.exception.ServerExceptionHandler[m(ServerExceptionHandler.java:22): Throwable: 
+java.io.IOException: Connection reset by peer
+	at sun.nio.ch.FileDispatcherImpl.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:39)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:378)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:259)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)

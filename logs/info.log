@@ -73,3 +73,143 @@ java.io.IOException: The server sockets created using the LocalRMIServerSocketFa
 [30m2022-12-27T15:37:29,055[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x2369b7f9]'
 [30m2022-12-27T15:37:29,066[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
 [30m2022-12-27T15:37:48,509[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:10:51,066[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 44841 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:10:51,070[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:10:51,929[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.362 seconds (JVM running for 2.576)
+[30m2022-12-27T17:10:52,075[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x6672da69]'
+[30m2022-12-27T17:10:52,087[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:10:58,686[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:10:58,728[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthenticator[m(FrontendAuthenticator.java:134): Access denied for user 'test1'
+[30m2022-12-27T17:12:55,625[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 45718 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:12:55,629[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:12:56,329[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.109 seconds (JVM running for 2.38)
+[30m2022-12-27T17:12:56,467[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xd71c4f1c]'
+[30m2022-12-27T17:12:56,475[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:13:10,716[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:13:34,674[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 46002 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:13:34,678[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:13:35,783[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.71 seconds (JVM running for 3.283)
+[30m2022-12-27T17:13:36,032[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xc48aeb11]'
+[30m2022-12-27T17:13:36,049[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:13:42,296[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:15:50,130[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 47618 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:15:50,135[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:15:51,072[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.518 seconds (JVM running for 2.923)
+[30m2022-12-27T17:15:51,242[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x3734ecc1]'
+[30m2022-12-27T17:15:51,254[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:16:02,105[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:17:31,243[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-2[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 1
+[30m2022-12-27T17:17:44,247[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-3[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 2
+[30m2022-12-27T17:18:27,373[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 48737 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:18:27,377[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:18:28,511[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.792 seconds (JVM running for 3.301)
+[30m2022-12-27T17:18:28,684[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x3f06a057]'
+[30m2022-12-27T17:18:28,698[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:19:03,535[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:26:46,462[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-2[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 1
+[30m2022-12-27T17:26:46,464[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.exception.ServerExceptionHandler[m(ServerExceptionHandler.java:22): Throwable: 
+java.io.IOException: Connection reset by peer
+	at sun.nio.ch.FileDispatcherImpl.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:39)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:378)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:259)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+[30m2022-12-27T17:26:52,040[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 52888 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:26:52,043[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:26:52,967[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.384 seconds (JVM running for 2.621)
+[30m2022-12-27T17:26:53,105[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x80fae564]'
+[30m2022-12-27T17:26:53,116[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:27:02,520[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:27:04,493[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-2[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 1
+[30m2022-12-27T17:34:16,361[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 56765 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:34:16,365[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:34:17,318[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.506 seconds (JVM running for 2.823)
+[30m2022-12-27T17:34:17,493[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x3e98c643]'
+[30m2022-12-27T17:34:17,505[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:34:20,357[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:37:46,268[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 58520 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:37:46,273[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:37:47,226[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.734 seconds (JVM running for 3.502)
+[30m2022-12-27T17:37:47,404[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xe2ef1e14]'
+[30m2022-12-27T17:37:47,417[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:38:00,587[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:39:35,068[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 59272 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:39:35,074[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:39:36,097[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.886 seconds (JVM running for 4.282)
+[30m2022-12-27T17:39:36,229[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x12311b06]'
+[30m2022-12-27T17:39:36,247[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:39:49,351[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:40:01,999[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.exception.ServerExceptionHandler[m(ServerExceptionHandler.java:22): Throwable: 
+java.io.IOException: Connection reset by peer
+	at sun.nio.ch.FileDispatcherImpl.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:39)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:378)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:259)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+[30m2022-12-27T17:40:06,471[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 59731 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:40:06,476[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:40:07,459[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.565 seconds (JVM running for 3.097)
+[30m2022-12-27T17:40:07,642[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xd7e07fe5]'
+[30m2022-12-27T17:40:07,655[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:40:09,852[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:43:21,801[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 61213 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:43:21,805[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:43:22,755[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.44 seconds (JVM running for 3.111)
+[30m2022-12-27T17:43:22,936[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xb53f480a]'
+[30m2022-12-27T17:43:22,949[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:44:03,357[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:44:37,213[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 61743 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:44:37,218[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:44:38,171[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.735 seconds (JVM running for 3.756)
+[30m2022-12-27T17:44:38,350[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x8fd584e8]'
+[30m2022-12-27T17:44:38,364[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:44:41,230[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:45:24,282[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 62749 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T17:45:24,285[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T17:45:25,125[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.312 seconds (JVM running for 2.573)
+[30m2022-12-27T17:45:25,290[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x0deba352]'
+[30m2022-12-27T17:45:25,301[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T17:45:29,050[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T17:46:06,013[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-2[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 1
+[30m2022-12-27T20:19:14,881[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 40129 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T20:19:14,885[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T20:19:15,751[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.34 seconds (JVM running for 2.489)
+[30m2022-12-27T20:19:15,875[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x75e31616]'
+[30m2022-12-27T20:19:15,885[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T20:19:22,393[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T20:21:07,044[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 40845 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T20:21:07,048[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T20:21:07,894[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.31 seconds (JVM running for 2.697)
+[30m2022-12-27T20:21:08,040[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x4eaa9e1e]'
+[30m2022-12-27T20:21:08,052[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T20:21:26,085[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0
+[30m2022-12-27T20:31:33,331[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:55): Starting MysqlProxyApplication using Java 1.8.0_281 on jiaohongyudeMacBook-Pro.local with PID 46186 (/Users/hongyujiao/Desktop/mysql-proxy/target/classes started by hongyujiao in /Users/hongyujiao/Desktop/mysql-proxy)
+[30m2022-12-27T20:31:33,333[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.SpringApplication[m(SpringApplication.java:631): No active profile set, falling back to 1 default profile: "default"
+[30m2022-12-27T20:31:33,999[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.springframework.boot.StartupInfoLogger[m(StartupInfoLogger.java:61): Started MysqlProxyApplication in 1.093 seconds (JVM running for 2.374)
+[30m2022-12-27T20:31:34,128[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x1f87fdca]'
+[30m2022-12-27T20:31:34,136[m [32mINFO  [m[[1;34mrestartedMain[m] [1;33morg.xyz.proxy.net.server.ProxyServer[m(ProxyServer.java:71): Server 启动, 端口为：/127.0.0.1:9999
+[30m2022-12-27T20:31:44,577[m [32mINFO  [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.connection.FrontConnectionFactory[m(FrontConnectionFactory.java:20): connection Id = 0

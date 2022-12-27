@@ -45,3 +45,58 @@ java.io.IOException: The server sockets created using the LocalRMIServerSocketFa
 	at java.lang.Thread.run(Thread.java:748)
 [30m2022-12-27T15:36:37,844[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x448700a2]'
 [30m2022-12-27T15:37:29,055[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x2369b7f9]'
+[30m2022-12-27T17:10:52,075[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x6672da69]'
+[30m2022-12-27T17:10:58,728[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthenticator[m(FrontendAuthenticator.java:134): Access denied for user 'test1'
+[30m2022-12-27T17:12:56,467[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xd71c4f1c]'
+[30m2022-12-27T17:13:36,032[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xc48aeb11]'
+[30m2022-12-27T17:15:51,242[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x3734ecc1]'
+[30m2022-12-27T17:18:28,684[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x3f06a057]'
+[30m2022-12-27T17:26:46,464[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.exception.ServerExceptionHandler[m(ServerExceptionHandler.java:22): Throwable: 
+java.io.IOException: Connection reset by peer
+	at sun.nio.ch.FileDispatcherImpl.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:39)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:378)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:259)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+[30m2022-12-27T17:26:53,105[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x80fae564]'
+[30m2022-12-27T17:34:17,493[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x3e98c643]'
+[30m2022-12-27T17:37:47,404[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xe2ef1e14]'
+[30m2022-12-27T17:39:36,229[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x12311b06]'
+[30m2022-12-27T17:40:01,999[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.exception.ServerExceptionHandler[m(ServerExceptionHandler.java:22): Throwable: 
+java.io.IOException: Connection reset by peer
+	at sun.nio.ch.FileDispatcherImpl.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:39)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:378)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:259)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+[30m2022-12-27T17:40:07,642[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xd7e07fe5]'
+[30m2022-12-27T17:43:22,936[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0xb53f480a]'
+[30m2022-12-27T17:44:38,350[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x8fd584e8]'
+[30m2022-12-27T17:45:25,290[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x0deba352]'
+[30m2022-12-27T20:19:15,875[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x75e31616]'
+[30m2022-12-27T20:21:08,040[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x4eaa9e1e]'
+[30m2022-12-27T20:31:34,128[m [33mWARN  [m[[1;34mrestartedMain[m] [1;33mio.netty.bootstrap.AbstractBootstrap[m(AbstractBootstrap.java:464): Unknown channel option 'io.netty.channel.unix.UnixChannelOption#SO_REUSEPORT' for channel '[id: 0x1f87fdca]'

@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.xyz.proxy.config.ProxyConfig;
 import org.xyz.proxy.net.connection.FrontendConnection;
 import org.xyz.proxy.net.constants.ErrorCode;
+import org.xyz.proxy.net.constants.SessionStateTypes;
+import org.xyz.proxy.net.constants.StatusFlags;
 import org.xyz.proxy.net.proto.mysql.*;
 import org.xyz.proxy.net.proto.util.SecurityUtil;
 import org.xyz.proxy.util.RandomUtil;
@@ -58,8 +60,23 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
         ctx.pipeline().replace(this, "frontCommandHandler", new FrontendCommandHandler(frontendConnection));
         // AUTH_OK is stable
         ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(OkPacket.AUTH_OK_PACKET);
-        // just io , no need thread pool
-        ctx.writeAndFlush(byteBuf);
+
+        OkPacket ok = new OkPacket(frontendConnection.getServerCapabilities());
+        ok.setSequenceId((byte) 4);
+        ok.setAffectedRows(0L);
+        ok.setLastInsertId(0);
+        ok.setStatusFlags(StatusFlags.SERVER_STATUS_AUTOCOMMIT | StatusFlags.SERVER_SESSION_STATE_CHANGED);
+        ok.setWarningCount(0);
+        ok.setInfo("");
+
+        String database = frontendConnection.getDatabase();
+        ok.setType(SessionStateTypes.SESSION_TRACK_SCHEMA.getValue());   // SESSION_TRACK_SCHEMA name of the changed schema
+        OkPacket.SessionTrackSchema sessionTrackSchema = new OkPacket.SessionTrackSchema();
+        sessionTrackSchema.setType(SessionStateTypes.SESSION_TRACK_SCHEMA.getValue());
+        sessionTrackSchema.setMandatoryFlag(5);
+        sessionTrackSchema.setName(database);
+        ok.setSessionStateInformation(sessionTrackSchema);
+        ok.write(ctx);
     }
 
     protected boolean checkPassword(byte[] password, String user) {
@@ -102,5 +119,9 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
 
     protected void failure(int errno, String info) {
         log.error(info);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("".getBytes().length);
     }
 }

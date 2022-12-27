@@ -13,6 +13,7 @@ public class FrontendConnection {
     private String user;
     private String host;
     private int port;
+    private String database;
 
     private long serverCapabilities;
     private long clientCapabilities;

@@ -69,8 +69,9 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
 
         frontendConnection.setClientCapabilities(hsp.getClientFlag());
         frontendConnection.setUser(hsp.getUserName());
+        frontendConnection.setDatabase(hsp.getDatabase());
 
-        if(hsp.getUserName().equals("test")) {  // test用户的密码是使用和client auth plugin不同的算法进行加密的，需要进行 auth switch，服务端发送 auth switch request
+        if(!hsp.getClientPluginName().equals(proxyConfig.getDefaultAuthPlugin())) {  // 服务端使用的加密算法是使用和client auth plugin不同的算法进行加密的，需要进行 auth switch，服务端发送 auth switch request
             ctx.pipeline().replace(this, "FrontendAuthSwitchHandler", new FrontendAuthSwitchHandler(frontendConnection, proxyConfig));
             return;
         }
