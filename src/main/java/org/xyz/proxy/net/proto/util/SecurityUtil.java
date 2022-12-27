@@ -9,14 +9,19 @@ import java.security.NoSuchAlgorithmException;
 public class SecurityUtil {
 
     // mysql_native_password
+    // SHA1( password ) XOR SHA1( "20-bytes random data from server" <concat> SHA1( SHA1( password ) ) )
     public static final byte[] scramble411(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
+        // SHA1(src) => digest_stage1
         byte[] pass1 = md.digest(pass);
         md.reset();
+        // SHA1(digest_stage1) => digest_stage2
         byte[] pass2 = md.digest(pass1);
         md.reset();
+        // SHA1(m_rnd, digest_stage2) => scramble_stage1
         md.update(seed);
         byte[] pass3 = md.digest(pass2);
+        // XOR(digest_stage1, scramble_stage1) => out_scramble
         for (int i = 0; i < pass3.length; i++) {
             pass3[i] = (byte) (pass3[i] ^ pass1[i]);
         }
@@ -76,9 +81,31 @@ public class SecurityUtil {
     }
 
     // TODO: caching_sha2_password
-
+    // XOR(SHA256(password), SHA256(SHA256(SHA256(password)), Nonce))
+    // Nonce - 20 byte long random data
+    public static final byte[] scrambleSha2(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        // SHA2(src) => digest_stage1
+        byte[] pass1 = md.digest(pass);
+        md.reset();
+        // SHA2(digest_stage1) => digest_stage2
+        byte[] pass2 = md.digest(pass1);
+        md.reset();
+        // SHA2(digest_stage2, m_rnd) => scramble_stage1
+        md.update(pass2);
+        byte[] pass3 = md.digest(seed);
+        // XOR(digest_stage1, scramble_stage1) => out_scramble
+        for (int i = 0; i < pass3.length; i++) {
+            pass3[i] = (byte) (pass3[i] ^ pass1[i]);
+        }
+        return pass3;
+    }
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        byte[] seed = new byte[] {0x2e, 0x0c, 0x2e, 0x22, 0x2d, 0x35, 0x37, 0x18, 0x28, 0x37, 0x1c, 0x20, 0x54, 0x4d, 0x74, 0x46, 0x7b, 0x2f, 0x60, 0x70};
-        SecurityUtil.scramble411("test".getBytes(), seed);
+        byte[] seed = new byte[] {0x58, 0x05, 0x70, 0x57, 0x42, 0x3c, 0x01, 0x73, 0x56, 0x60, 0x07, 0x15, 0x7b, 0x6c, 0x19, 0x76, 0x2c, 0x35, 0x3d, 0x05};
+        byte[] rst = SecurityUtil.scrambleSha2("test".getBytes(), seed);
+        for(byte i : rst) {
+            System.out.println(i & 0xFF);
+        }
+
     }
 }
