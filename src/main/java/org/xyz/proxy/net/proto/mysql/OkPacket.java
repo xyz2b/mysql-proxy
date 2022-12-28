@@ -6,8 +6,8 @@ import lombok.Data;
 import org.xyz.proxy.net.constants.CapabilitiesFlags;
 import org.xyz.proxy.net.constants.SessionStateTypes;
 import org.xyz.proxy.net.constants.StatusFlags;
-import org.xyz.proxy.net.proto.util.ByteReaderUtil;
-import org.xyz.proxy.net.proto.util.ByteWriterUtil;
+import org.xyz.proxy.net.util.ByteReaderUtil;
+import org.xyz.proxy.net.util.ByteWriterUtil;
 
 @Data
 public class OkPacket extends MySQLPacket {

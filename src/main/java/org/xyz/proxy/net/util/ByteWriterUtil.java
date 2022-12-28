@@ -1,4 +1,4 @@
-package org.xyz.proxy.net.proto.util;
+package org.xyz.proxy.net.util;
 
 import io.netty.buffer.ByteBuf;
 

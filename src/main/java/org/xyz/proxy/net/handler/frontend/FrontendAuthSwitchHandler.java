@@ -1,6 +1,5 @@
 package org.xyz.proxy.net.handler.frontend;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,7 @@ import org.xyz.proxy.net.constants.ErrorCode;
 import org.xyz.proxy.net.constants.SessionStateTypes;
 import org.xyz.proxy.net.constants.StatusFlags;
 import org.xyz.proxy.net.proto.mysql.*;
-import org.xyz.proxy.net.proto.util.SecurityUtil;
+import org.xyz.proxy.net.util.SecurityUtil;
 import org.xyz.proxy.util.RandomUtil;
 
 import java.net.InetSocketAddress;
@@ -84,9 +83,11 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
         ok.write(ctx);
     }
 
-    protected boolean checkPassword(byte[] password, String user) {
+    protected boolean checkPassword(byte[] password, String user) throws NoSuchAlgorithmException {
         // todo config
         String pass = "test";
+        // 存储在mysql.user表的authentication_string字段的值 = SHA1(SHA1( pass ))
+        byte[] p = SecurityUtil.scrambleSha1Sha1(pass.getBytes());
 
         // check null
         if (pass == null || pass.length() == 0) {
@@ -103,15 +104,15 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
         // encrypt
         byte[] encryptPass = null;
         try {
-            encryptPass = SecurityUtil.scramble411(pass.getBytes(), seed);
+            encryptPass = SecurityUtil.decodeClientPassword(password, seed, p);
         } catch (NoSuchAlgorithmException e) {
             log.warn("", e);
             return false;
         }
-        if (encryptPass != null && (encryptPass.length == password.length)) {
+        if (encryptPass != null && (encryptPass.length == p.length)) {
             int i = encryptPass.length;
             while (i-- != 0) {
-                if (encryptPass[i] != password[i]) {
+                if (encryptPass[i] != p[i]) {
                     return false;
                 }
             }

@@ -1,14 +1,12 @@
 package org.xyz.proxy.net.codec;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.xyz.proxy.net.exception.InvalidFrameException;
 import org.xyz.proxy.net.proto.mysql.BinaryPacket;
-import org.xyz.proxy.net.proto.util.ByteReaderUtil;
-import org.xyz.proxy.util.GsonUtil;
+import org.xyz.proxy.net.util.ByteReaderUtil;
 
 import java.nio.ByteOrder;
 

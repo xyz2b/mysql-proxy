@@ -3,6 +3,7 @@ package org.xyz.proxy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.xyz.proxy.net.server.ProxyServer;
 
@@ -13,13 +14,20 @@ import org.xyz.proxy.net.server.ProxyServer;
 @SpringBootApplication
 public class MysqlProxyApplication {
     public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(MysqlProxyApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(MysqlProxyApplication.class, args);
 
         /**
          * 启动服务
          */
         ProxyServer nettyServer = context.getBean(ProxyServer.class);
-        nettyServer.run();
+        try {
+            nettyServer.run();
+        } catch (Exception e) {
+            context.close();
+            System.exit(-1);
+        }
+        context.close();
+        System.exit(0);
     }
 
 }

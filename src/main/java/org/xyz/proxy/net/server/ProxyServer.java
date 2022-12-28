@@ -35,7 +35,7 @@ public class ProxyServer {
     // 启动引导器
     private ServerBootstrap b = new ServerBootstrap();
 
-    public void run() {
+    public void run() throws InterruptedException {
         String ip = proxyConfig.getIp();
         int port = proxyConfig.getPort();
 
@@ -72,6 +72,7 @@ public class ProxyServer {
         } catch (Exception e) {
             log.error("Server 启动失败，端口为：{} msg: {}", ip + ":" + port, e.getMessage());
             log.error("Exception: ", e);
+            throw e;
         }
 
 //        boolean isStart = false;
@@ -101,7 +102,8 @@ public class ProxyServer {
                         wg.shutdownGracefully();
                         bg.shutdownGracefully();
                     }
-                }));
+                })
+        );
         try {
             // 7 监听通道关闭事件
             // 应用程序会一直等待，直到channel关闭
@@ -109,6 +111,7 @@ public class ProxyServer {
             closeFuture.sync();
         } catch (Exception e) {
             log.error("发生其他异常", e);
+            throw e;
         } finally {
             // 8 优雅关闭EventLoopGroup，
             // 释放掉所有资源包括创建的线程

@@ -1,4 +1,4 @@
-package org.xyz.proxy.net.proto.util;
+package org.xyz.proxy.net.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,7 +10,7 @@ public class SecurityUtil {
 
     // mysql_native_password
     // SHA1( password ) XOR SHA1( "20-bytes random data from server" <concat> SHA1( SHA1( password ) ) )
-    public static final byte[] scramble411(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
+    public static byte[] scramble411(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         // SHA1(src) => digest_stage1
         byte[] pass1 = md.digest(pass);
@@ -28,7 +28,41 @@ public class SecurityUtil {
         return pass3;
     }
 
-    public static final String scramble323(String pass, String seed) {
+    // clientPass是客户端传来的加密字符串
+    // password是服务端存储的sha1(sha1(明文密码))
+    // 返回sha1(sha1(明文密码))
+    public static byte[] decodeClientPassword(byte[] clientPass, byte[] seed, byte[] password) throws NoSuchAlgorithmException {
+        // clientPass = SHA1( 明文密码 ) XOR SHA1( seed + SHA1( SHA1( 明文密码 ) ) )
+        // password = SHA1( SHA1( 明文密码 ) )
+        // 将客户端传来的clientPass，经过 (clientPass XOR SHA1(seed + password)) = SHA1( 明文密码 )
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        // SHA1(seed + password) -> pass1 -> SHA1( seed + SHA1( SHA1( 明文密码 ) ) )
+        md.update(seed);
+        byte[] pass1 = md.digest(password);
+        // clientPass XOR pass1 -> pass2 = SHA1( 明文密码 )
+        byte[] pass2 = new byte[clientPass.length];
+        for (int i = 0; i < clientPass.length; i++) {
+            pass2[i] = (byte) (clientPass[i] ^ pass1[i]);
+        }
+
+        // SHA1( pass2 ) -> pass4 = SHA1( SHA1( 明文密码 ) )
+        md.reset();
+        byte[] pass4 = md.digest(pass2);
+        return pass4;
+    }
+
+    // mysql_native_password 在 mysql.user 表中 authentication_string 字段存储的是两次哈希 SHA1(SHA1(password)) 计算的值，以十六进制byte[]形式存储
+    public static byte[] scrambleSha1Sha1(byte[] pass) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        // SHA1(src) => digest_stage1
+        byte[] pass1 = md.digest(pass);
+        md.reset();
+        // SHA1(digest_stage1) => digest_stage2
+        byte[] pass2 = md.digest(pass1);
+        return pass2;
+    }
+
+    public static String scramble323(String pass, String seed) {
         if ((pass == null) || (pass.length() == 0)) {
             return pass;
         }
@@ -83,7 +117,7 @@ public class SecurityUtil {
     // TODO: caching_sha2_password
     // XOR(SHA256(password), SHA256(SHA256(SHA256(password)), Nonce))
     // Nonce - 20 byte long random data
-    public static final byte[] scrambleSha2(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
+    public static byte[] scrambleSha2(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         // SHA2(src) => digest_stage1
         byte[] pass1 = md.digest(pass);
@@ -101,11 +135,37 @@ public class SecurityUtil {
         return pass3;
     }
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        byte[] seed = new byte[] {0x58, 0x05, 0x70, 0x57, 0x42, 0x3c, 0x01, 0x73, 0x56, 0x60, 0x07, 0x15, 0x7b, 0x6c, 0x19, 0x76, 0x2c, 0x35, 0x3d, 0x05};
-        byte[] rst = SecurityUtil.scrambleSha2("test".getBytes(), seed);
-        for(byte i : rst) {
-            System.out.println(i & 0xFF);
+        byte[] seed = new byte[] {(byte) 0x59, (byte) 0x4a, (byte) 0x45, (byte) 0x37, (byte) 0x32, (byte) 0x69, (byte) 0x43, (byte) 0x38, (byte) 0x42, (byte) 0x47, (byte) 0x73, (byte) 0x73, (byte) 0x54, (byte) 0x6e, (byte) 0x77, (byte) 0x39, (byte) 0x54, (byte) 0x72, (byte) 0x4d, (byte) 0x77};
+        byte[] clientPass = SecurityUtil.scramble411("test".getBytes(), seed);
+        StringBuilder sb1 = new StringBuilder();
+        sb1.append("clientPass: ");
+        for(byte i : clientPass) {
+            sb1.append(Integer.toHexString(i & 0xFF)).append(", ");
         }
+        sb1.append('\n');
+        System.out.println(sb1);
+
+        StringBuilder sb = new StringBuilder();
+
+        byte[] password = SecurityUtil.scrambleSha1Sha1("test".getBytes());
+        sb.append("server password: ");
+        for(byte i : password) {
+            sb.append(Integer.toHexString(i & 0xFF)).append(", ");
+        }
+        sb.append('\n');
+
+        System.out.println(sb);
+
+        StringBuilder sb2 = new StringBuilder();
+        sb2.append("client password: ");
+
+        byte[] g = decodeClientPassword(clientPass, seed, password);
+
+        for(byte i : g) {
+            sb2.append(Integer.toHexString(i & 0xFF)).append(", ");
+        }
+        sb2.append('\n');
+        System.out.println(sb2);
 
     }
 }

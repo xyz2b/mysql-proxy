@@ -1,6 +1,5 @@
 package org.xyz.proxy.net.handler.backend;
 
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +7,7 @@ import org.xyz.proxy.net.connection.BackendConnection;
 import org.xyz.proxy.net.exception.ErrorPacketException;
 import org.xyz.proxy.net.exception.UnknownPacketException;
 import org.xyz.proxy.net.proto.mysql.*;
-import org.xyz.proxy.net.proto.util.SecurityUtil;
+import org.xyz.proxy.net.util.SecurityUtil;
 import org.xyz.proxy.net.constants.BackendConnState;
 import org.xyz.proxy.net.constants.CharacterSet;
 

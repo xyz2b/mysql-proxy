@@ -1,2 +1,0 @@
-[30m2022-12-28T12:20:21,113[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthSwitchHandler[m(FrontendAuthSwitchHandler.java:126): Access denied for user 'test1'@'127.0.0.1' (using password: YES)
-[30m2022-12-28T12:30:58,246[m [1;31mERROR [m[[1;34mnioEventLoopGroup-3-1[m] [1;33morg.xyz.proxy.net.handler.frontend.FrontendAuthSwitchHandler[m(FrontendAuthSwitchHandler.java:126): Access denied for user 'test1'@'localhost' (using password: YES)

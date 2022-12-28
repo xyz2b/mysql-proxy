@@ -3,7 +3,7 @@ package org.xyz.proxy.net.proto.mysql;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
-import org.xyz.proxy.net.proto.util.ByteWriterUtil;
+import org.xyz.proxy.net.util.ByteWriterUtil;
 
 @Data
 public class AuthSwitchRequest extends MySQLPacket {
