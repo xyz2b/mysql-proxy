@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 import org.xyz.proxy.config.ProxyConfig;
 import org.xyz.proxy.net.connection.FrontendConnection;
 import org.xyz.proxy.net.constants.*;
-import org.xyz.proxy.net.proto.mysql.BinaryPacket;
-import org.xyz.proxy.net.proto.mysql.HandshakePacket;
-import org.xyz.proxy.net.proto.mysql.HandshakeResponsePacket;
-import org.xyz.proxy.net.proto.mysql.OkPacket;
+import org.xyz.proxy.net.proto.mysql.*;
 import org.xyz.proxy.net.proto.util.SecurityUtil;
 import org.xyz.proxy.util.RandomUtil;
+
+import java.net.InetSocketAddress;
 import java.security.NoSuchAlgorithmException;
 
 // 前端通道Active处理器
@@ -78,7 +77,9 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
         }
         // check password
         if (!checkPassword(hsp.getPassword(), hsp.getUserName())) {
-            failure(ErrorCode.ER_ACCESS_DENIED_ERROR, "Access denied for user '" + hsp.getUserName() + "'");
+            String host =  ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
+            String errorMsg = String.format("Access denied for user '%s'@'%s' (using password: YES)", frontendConnection.getUser(), host);
+            failure(ctx, ErrorCode.ER_ACCESS_DENIED_ERROR, errorMsg);
             ctx.close();
             return;
         }
@@ -136,7 +137,15 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
         return true;
     }
 
-    protected void failure(int errno, String info) {
+    private void failure(final ChannelHandlerContext ctx, int errno, String info) {
         log.error(info);
+        // 发送ERROR报文
+        ErrorPacket errorPacket = new ErrorPacket(frontendConnection.getServerCapabilities());
+        errorPacket.setSequenceId((byte) 4);
+        errorPacket.setErrorCode(errno);
+        errorPacket.setSqlStateMarker("#");
+        errorPacket.setSqlState("28000");
+        errorPacket.setErrorMessage(info);
+        errorPacket.write(ctx);
     }
 }

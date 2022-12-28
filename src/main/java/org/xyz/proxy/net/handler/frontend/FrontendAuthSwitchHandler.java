@@ -13,6 +13,7 @@ import org.xyz.proxy.net.proto.mysql.*;
 import org.xyz.proxy.net.proto.util.SecurityUtil;
 import org.xyz.proxy.util.RandomUtil;
 
+import java.net.InetSocketAddress;
 import java.security.NoSuchAlgorithmException;
 
 @Slf4j
@@ -48,7 +49,9 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
 
         // check password
         if (!checkPassword(asp.getPassword(), frontendConnection.getUser())) {
-            failure(ErrorCode.ER_ACCESS_DENIED_ERROR, "Access denied for user '" + frontendConnection.getUser() + "'");
+            String host =  ((InetSocketAddress) ctx.channel().remoteAddress()).getHostName();
+            String errorMsg = String.format("Access denied for user '%s'@'%s' (using password: YES)", frontendConnection.getUser(), host);
+            failure(ctx, ErrorCode.ER_ACCESS_DENIED_ERROR, errorMsg);
             ctx.close();
             return;
         }
@@ -119,8 +122,16 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
         return true;
     }
 
-    protected void failure(int errno, String info) {
+    private void failure(final ChannelHandlerContext ctx, int errno, String info) {
         log.error(info);
+        // 发送ERROR报文
+        ErrorPacket errorPacket = new ErrorPacket(frontendConnection.getServerCapabilities());
+        errorPacket.setSequenceId((byte) 4);
+        errorPacket.setErrorCode(errno);
+        errorPacket.setSqlStateMarker("#");
+        errorPacket.setSqlState("28000");
+        errorPacket.setErrorMessage(info);
+        errorPacket.write(ctx);
     }
 
     public static void main(String[] args) {
