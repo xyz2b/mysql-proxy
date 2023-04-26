@@ -366,6 +366,101 @@ public final class MySQLPacketPayload implements PacketPayload {
         // TODO
     }
 
+    /**
+     * Read null terminated string from byte buffers.
+     *
+     * @see <a href="https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_dt_strings.html#sect_protocol_basic_dt_string_null">NulTerminatedString</a>
+     *
+     * @return null terminated string
+     */
+    public String readStringNul() {
+        byte[] result = new byte[byteBuf.bytesBefore((byte) 0)];
+        byteBuf.readBytes(result);
+        byteBuf.skipBytes(1);
+        return new String(result, charset);
+    }
+
+    /**
+     * Read null terminated string from byte buffers and return bytes.
+     *
+     * @see <a href="https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_dt_strings.html#sect_protocol_basic_dt_string_null">NulTerminatedString</a>
+     *
+     * @return null terminated bytes
+     */
+    public byte[] readStringNulByBytes() {
+        byte[] result = new byte[byteBuf.bytesBefore((byte) 0)];
+        byteBuf.readBytes(result);
+        byteBuf.skipBytes(1);
+        return result;
+    }
+
+    /**
+     * Write null terminated string to byte buffers.
+     *
+     * @see <a href="https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_dt_strings.html#sect_protocol_basic_dt_string_null">NulTerminatedString</a>
+     *
+     * @param value null terminated string
+     */
+    public void writeStringNul(final String value) {
+        byteBuf.writeBytes(value.getBytes(charset));
+        byteBuf.writeByte(0);
+    }
+
+    /**
+     * Read rest of packet string from byte buffers and return bytes (the last component of a packet).
+     *
+     * @see <a href="https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_dt_strings.html#sect_protocol_basic_dt_string_eof">RestOfPacketString</a>
+     *
+     * @return rest of packet string bytes
+     */
+    public byte[] readStringEOFByBytes() {
+        byte[] result = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(result);
+        return result;
+    }
+
+    /**
+     * Read rest of packet string from byte buffers (the last component of a packet).
+     *
+     * @see <a href="https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_dt_strings.html#sect_protocol_basic_dt_string_eof">RestOfPacketString</a>
+     *
+     * @return rest of packet string
+     */
+    public String readStringEOF() {
+        byte[] result = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(result);
+        return new String(result, charset);
+    }
+
+    /**
+     * Write rest of packet string to byte buffers (the last component of a packet).
+     *
+     * @see <a href="https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_dt_strings.html#sect_protocol_basic_dt_string_eof">RestOfPacketString</a>
+     *
+     * @param value rest of packet string
+     */
+    public void writeStringEOF(final String value) {
+        byteBuf.writeBytes(value.getBytes(charset));
+    }
+
+    /**
+     * Skip reserved from byte buffers.
+     *
+     * @param length length of reserved
+     */
+    public void skipReserved(final int length) {
+        byteBuf.skipBytes(length);
+    }
+
+    /**
+     * Write null for reserved to byte buffers.
+     *
+     * @param length length of reserved
+     */
+    public void writeReserved(final int length) {
+        byteBuf.writeZero(length);
+    }
+
     @Override
     public void close() throws Exception {
         byteBuf.release();
