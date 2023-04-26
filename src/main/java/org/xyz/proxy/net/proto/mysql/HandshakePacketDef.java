@@ -7,7 +7,7 @@ import org.xyz.proxy.net.constants.CapabilitiesFlags;
 import org.xyz.proxy.net.util.ByteWriterUtil;
 
 @Data
-public class HandshakePacket extends MySQLPacket {
+public class HandshakePacketDef extends MySQLPacketDef {
     private static final byte[] RESERVED = new byte[10];
     private static final byte[] FILLER_1 = new byte[1];
 
@@ -22,11 +22,11 @@ public class HandshakePacket extends MySQLPacket {
     public int serverStatus;
     private String authPluginName;
 
-    public HandshakePacket() {
+    public HandshakePacketDef() {
 
     }
 
-    public void read(BinaryPacket bin) {
+    public void read(BinaryPacketDef bin) {
         setPayloadLength(bin.getPayloadLength());
         setSequenceId(bin.getSequenceId());
 

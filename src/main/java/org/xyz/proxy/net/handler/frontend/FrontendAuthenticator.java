@@ -43,7 +43,7 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
         this.seed = seed;
 
         // 握手初始化请求包
-        HandshakePacket hs = new HandshakePacket();
+        HandshakePacketDef hs = new HandshakePacketDef();
         hs.setSequenceId((byte) 0);
         hs.setProtocolVersion(Versions.PROTOCOL_VERSION);
         hs.setServerVersion(Versions.SERVER_VERSION);
@@ -59,8 +59,8 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
     // 接收 握手响应，认证用户和密码
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        BinaryPacket bin = (BinaryPacket) msg;
-        HandshakeResponsePacket hsp = new HandshakeResponsePacket();
+        BinaryPacketDef bin = (BinaryPacketDef) msg;
+        HandshakeResponsePacketDef hsp = new HandshakeResponsePacketDef();
         hsp.read(bin);
 
         frontendConnection.setClientCapabilities(hsp.getClientFlag());
@@ -90,7 +90,7 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
         // AUTH_OK , process command
         ctx.pipeline().replace(this, "frontCommandHandler", new FrontendCommandHandler(frontendConnection));
         // 发送 AUTH_OK 响应报文
-        ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(OkPacket.AUTH_OK_PACKET);
+        ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(OkPacketDef.AUTH_OK_PACKET);
         // just io , no need thread pool
         ctx.writeAndFlush(byteBuf);
     }
@@ -138,7 +138,7 @@ public class FrontendAuthenticator extends ChannelInboundHandlerAdapter {
     private void failure(final ChannelHandlerContext ctx, int errno, String info) {
         log.error(info);
         // 发送ERROR报文
-        ErrorPacket errorPacket = new ErrorPacket(frontendConnection.getServerCapabilities());
+        ErrorPacketDef errorPacket = new ErrorPacketDef(frontendConnection.getServerCapabilities());
         errorPacket.setSequenceId((byte) 4);
         errorPacket.setErrorCode(errno);
         errorPacket.setSqlStateMarker("#");

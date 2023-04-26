@@ -43,14 +43,14 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
     }
 
     private void authOk(ChannelHandlerContext ctx, Object msg) {
-        BinaryPacket bin = (BinaryPacket) msg;
+        BinaryPacketDef bin = (BinaryPacketDef) msg;
         int responsePacketId = bin.getPayload().getByte(0);
         switch (responsePacketId) {
-            case OkPacket.PACKET_ID:
+            case OkPacketDef.PACKET_ID:
                 afterSuccess();
                 break;
-            case ErrorPacket.PACKET_ID:
-                ErrorPacket err = new ErrorPacket(backendConnection.getClientFlag());
+            case ErrorPacketDef.PACKET_ID:
+                ErrorPacketDef err = new ErrorPacketDef(backendConnection.getClientFlag());
                 err.read(bin);
                 throw new ErrorPacketException("Auth not Okay");
             default:
@@ -75,8 +75,8 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
     }
 
     private void auth(ChannelHandlerContext ctx, Object msg) {
-        HandshakePacket hsp = new HandshakePacket();
-        hsp.read((BinaryPacket) msg);
+        HandshakePacketDef hsp = new HandshakePacketDef();
+        hsp.read((BinaryPacketDef) msg);
         try {
             auth(hsp, ctx);
         } catch (NoSuchAlgorithmException e) {
@@ -85,9 +85,9 @@ public class BackendAuthenticator extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private void auth(HandshakePacket hsp, ChannelHandlerContext ctx)
+    private void auth(HandshakePacketDef hsp, ChannelHandlerContext ctx)
             throws NoSuchAlgorithmException {
-        HandshakeResponsePacket hp = new HandshakeResponsePacket();
+        HandshakeResponsePacketDef hp = new HandshakeResponsePacketDef();
         hp.setSequenceId(1);
         hp.setClientFlag(backendConnection.getClientFlag());
         hp.setMaxPacketSize(MAX_PACKET_SIZE);

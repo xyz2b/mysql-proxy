@@ -7,7 +7,7 @@ import org.xyz.proxy.net.util.ByteWriterUtil;
 
 // MySql包 外层结构
 @Data
-public class BinaryPacket extends MySQLPacket {
+public class BinaryPacketDef extends MySQLPacketDef {
     public static final byte OK = 1;
     public static final byte ERROR = 2;
     public static final byte HEADER = 3;

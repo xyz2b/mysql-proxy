@@ -6,10 +6,10 @@ import lombok.Data;
 import org.xyz.proxy.net.util.ByteWriterUtil;
 
 @Data
-public class AuthSwitchResponse extends MySQLPacket {
+public class AuthSwitchResponse extends MySQLPacketDef {
     private byte[] password; // data
 
-    public void read(BinaryPacket bin) {
+    public void read(BinaryPacketDef bin) {
         setPayloadLength(bin.getPayloadLength());
         setSequenceId(bin.getSequenceId());
 

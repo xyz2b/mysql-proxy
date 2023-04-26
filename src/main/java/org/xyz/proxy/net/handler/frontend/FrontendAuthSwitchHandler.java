@@ -42,7 +42,7 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        BinaryPacket bin = (BinaryPacket) msg;
+        BinaryPacketDef bin = (BinaryPacketDef) msg;
         AuthSwitchResponse asp = new AuthSwitchResponse();
         asp.read(bin);
 
@@ -65,7 +65,7 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
         // AUTH_OK , process command
         ctx.pipeline().replace(this, "frontCommandHandler", new FrontendCommandHandler(frontendConnection));
         // 发送 OK 响应报文
-        OkPacket ok = new OkPacket(frontendConnection.getServerCapabilities());
+        OkPacketDef ok = new OkPacketDef(frontendConnection.getServerCapabilities());
         ok.setSequenceId((byte) 4);
         ok.setAffectedRows(0L);
         ok.setLastInsertId(0);
@@ -75,7 +75,7 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
 
         String database = frontendConnection.getDatabase();
         ok.setType(SessionStateTypes.SESSION_TRACK_SCHEMA.getValue());   // SESSION_TRACK_SCHEMA name of the changed schema
-        OkPacket.SessionTrackSchema sessionTrackSchema = new OkPacket.SessionTrackSchema();
+        OkPacketDef.SessionTrackSchema sessionTrackSchema = new OkPacketDef.SessionTrackSchema();
         sessionTrackSchema.setType(SessionStateTypes.SESSION_TRACK_SCHEMA.getValue());
         sessionTrackSchema.setMandatoryFlag(5);
         sessionTrackSchema.setName(database);
@@ -126,7 +126,7 @@ public class FrontendAuthSwitchHandler extends ChannelInboundHandlerAdapter {
     private void failure(final ChannelHandlerContext ctx, int errno, String info) {
         log.error(info);
         // 发送ERROR报文
-        ErrorPacket errorPacket = new ErrorPacket(frontendConnection.getServerCapabilities());
+        ErrorPacketDef errorPacket = new ErrorPacketDef(frontendConnection.getServerCapabilities());
         errorPacket.setSequenceId((byte) 4);
         errorPacket.setErrorCode(errno);
         errorPacket.setSqlStateMarker("#");

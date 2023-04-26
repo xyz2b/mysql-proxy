@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.xyz.proxy.net.exception.InvalidFrameException;
-import org.xyz.proxy.net.proto.mysql.BinaryPacket;
+import org.xyz.proxy.net.proto.mysql.BinaryPacketDef;
 import org.xyz.proxy.net.util.ByteReaderUtil;
 
 import java.nio.ByteOrder;
@@ -37,7 +37,7 @@ public class MySqlPacketDecoder extends LengthFieldBasedFrameDecoder  {
         if (sequenceId < 0) {
             throw new InvalidFrameException(String.format("get packet sequenceId error, packetLength = %d, packetSequenceId = %d", payloadLength, sequenceId));
         }
-        BinaryPacket packet = new BinaryPacket();
+        BinaryPacketDef packet = new BinaryPacketDef();
         packet.setPayloadLength(payloadLength);
         packet.setSequenceId(sequenceId);
         // data will not be accessed any more,so we can use this array safely

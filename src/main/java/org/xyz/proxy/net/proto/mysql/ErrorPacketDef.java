@@ -7,7 +7,7 @@ import org.xyz.proxy.net.constants.CapabilitiesFlags;
 import org.xyz.proxy.net.util.ByteWriterUtil;
 
 @Data
-public class ErrorPacket extends MySQLPacket {
+public class ErrorPacketDef extends MySQLPacketDef {
     public static final byte PACKET_ID = (byte) 0xff;
 
     private static final byte SQLSTATE_MARKER = (byte) '#';
@@ -20,11 +20,11 @@ public class ErrorPacket extends MySQLPacket {
     private String errorMessage;
 
     private long serverCapabilities;
-    public ErrorPacket(long serverCapabilities) {
+    public ErrorPacketDef(long serverCapabilities) {
         this.serverCapabilities = serverCapabilities;
     }
 
-    public void read(BinaryPacket bin) {
+    public void read(BinaryPacketDef bin) {
         setPayloadLength(bin.getPayloadLength());
         setSequenceId(bin.getSequenceId());
         MySQLMessageStream mm = new MySQLMessageStream(bin.getPayload());

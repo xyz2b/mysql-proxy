@@ -1,14 +1,10 @@
 package org.xyz.proxy.net.proto.mysql;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 
-import java.nio.ByteBuffer;
-
 @Data
-public abstract class MySQLPacket {
+public abstract class MySQLPacketDef {
     /**
      * none, this is an internal thread state
      */
@@ -123,7 +119,7 @@ public abstract class MySQLPacket {
     private int payloadLength;
     private int sequenceId = 0;
 
-    public void read(BinaryPacket bin) {
+    public void read(BinaryPacketDef bin) {
         throw new UnsupportedOperationException();
     }
 

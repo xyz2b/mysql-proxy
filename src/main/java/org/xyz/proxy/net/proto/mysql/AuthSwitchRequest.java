@@ -6,7 +6,7 @@ import lombok.Data;
 import org.xyz.proxy.net.util.ByteWriterUtil;
 
 @Data
-public class AuthSwitchRequest extends MySQLPacket {
+public class AuthSwitchRequest extends MySQLPacketDef {
 
     public static final byte PACKET_ID = (byte) 0xFE;
 
@@ -14,7 +14,7 @@ public class AuthSwitchRequest extends MySQLPacket {
     private String pluginName;
     private byte[] seed;    // plugin provided data，新的盐值
 
-    public void read(BinaryPacket bin) {
+    public void read(BinaryPacketDef bin) {
         setPayloadLength(bin.getPayloadLength());
         setSequenceId(bin.getSequenceId());
 

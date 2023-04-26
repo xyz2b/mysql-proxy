@@ -10,7 +10,7 @@ import org.xyz.proxy.net.util.ByteReaderUtil;
 import org.xyz.proxy.net.util.ByteWriterUtil;
 
 @Data
-public class OkPacket extends MySQLPacket {
+public class OkPacketDef extends MySQLPacketDef {
 
     public static final byte PACKET_ID = (byte) 0x00;
 
@@ -29,11 +29,11 @@ public class OkPacket extends MySQLPacket {
     private SessionStateInformation sessionStateInformation;
 
     private long serverCapabilities;
-    public OkPacket(long serverCapabilities) {
+    public OkPacketDef(long serverCapabilities) {
         this.serverCapabilities = serverCapabilities;
     }
 
-    public void read(BinaryPacket bin) {
+    public void read(BinaryPacketDef bin) {
         setPayloadLength(bin.getPayloadLength());
         setSequenceId(bin.getSequenceId());
         MySQLMessageStream mm = new MySQLMessageStream(bin.getPayload());

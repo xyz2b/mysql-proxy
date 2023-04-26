@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class HandshakeResponsePacket extends MySQLPacket {
+public class HandshakeResponsePacketDef extends MySQLPacketDef {
     private static final byte[] FILLER_23 = new byte[23];
 
     public long clientFlag;
@@ -27,7 +27,7 @@ public class HandshakeResponsePacket extends MySQLPacket {
     private long clientConnectAttrsLength;
     private Map<String, String> clientConnectAttrs;
 
-    public void read(BinaryPacket bin) {
+    public void read(BinaryPacketDef bin) {
         setPayloadLength(bin.getPayloadLength());
         setSequenceId(bin.getSequenceId());
         MySQLMessageStream mm = new MySQLMessageStream(bin.payload);
@@ -135,6 +135,6 @@ public class HandshakeResponsePacket extends MySQLPacket {
 
     @Override
     protected String getPacketInfo() {
-        return "MySQL HandshakeResponsePacket Packet";
+        return "MySQL HandshakeResponsePacketDef Packet";
     }
 }
