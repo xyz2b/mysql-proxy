@@ -3,13 +3,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.xyz</groupId>
-    <artifactId>mysql-proxy</artifactId>
+    <groupId>org.xyz.dbproxy</groupId>
+    <artifactId>dbproxy</artifactId>
     <version>0.0.1</version>
-    <name>mysql-proxy</name>
-    <description>mysql-proxy</description>
+    <packaging>pom</packaging>
+    <name>dbproxy</name>
+    <description>db proxy</description>
 
-    <packaging>jar</packaging>
+    <modules>
+        <module>proxy</module>
+        <module>db-protocol</module>
+        <module>infra</module>
+        <module>dialect-execption</module>
+        <module>dialect-execption/core</module>
+        <module>mode</module>
+    </modules>
 
     <properties>
         <java.version>1.8</java.version>
@@ -123,7 +131,7 @@
                 <version>${spring.boot.version}</version>
                 <configuration>
                     <!-- main方法的地址-->
-                    <mainClass>org.xyz.proxy.MysqlProxyApplication</mainClass>
+                    <mainClass>org.xyz.mysqlproxy.MysqlProxyApplication</mainClass>
                     <executable>true</executable>
                     <layout>JAR</layout>
                     <excludes>
