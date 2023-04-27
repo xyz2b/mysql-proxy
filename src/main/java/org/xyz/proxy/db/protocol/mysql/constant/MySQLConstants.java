@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MySQLConstants {
+    // key: MYSQL_SEQUENCE_ID，建立channel时写入其属性中
 
     public static final AttributeKey<AtomicInteger> MYSQL_SEQUENCE_ID = AttributeKey.valueOf("MYSQL_SEQUENCE_ID");
 

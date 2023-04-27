@@ -29,10 +29,12 @@ public final class MySQLErrPacket implements MySQLPacket {
 
     private final String errorMessage;
 
+    // VendorError是一类错误的封装，一类错误应该具有相同的错误消息格式模板。errorCode、sqlState、模板中的参数可能不同
     public MySQLErrPacket(final VendorError vendorError, final Object... errorMessageArgs) {
         this(vendorError.getVendorCode(), vendorError.getSqlState().getValue(), String.format(vendorError.getReason(), errorMessageArgs));
     }
 
+    // 将MySQLPacketPayload 转成 MySQLErrPacket（decode）
     public MySQLErrPacket(final MySQLPacketPayload payload) {
         Preconditions.checkArgument(HEADER == payload.readInt1(), "Header of MySQL ERR packet must be `0xff`.");
         errorCode = payload.readInt2();
@@ -41,6 +43,7 @@ public final class MySQLErrPacket implements MySQLPacket {
         errorMessage = payload.readStringEOF();
     }
 
+    // 将MySQLErrPacket 转成 MySQLPacketPayload（encode）
     @Override
     public void write(final MySQLPacketPayload payload) {
         payload.writeInt1(HEADER);

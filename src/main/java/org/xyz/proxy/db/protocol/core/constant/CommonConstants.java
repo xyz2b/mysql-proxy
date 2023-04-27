@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CommonConstants {
 
+    // key: java.nio.charset.Charset，设置到channel属性里
     public static final AttributeKey<Charset> CHARSET_ATTRIBUTE_KEY = AttributeKey.valueOf(Charset.class.getName());
 
     public static final AtomicReference<String> PROXY_VERSION = new AtomicReference<>();
