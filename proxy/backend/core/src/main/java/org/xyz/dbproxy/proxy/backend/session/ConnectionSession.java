@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public final class ConnectionSession {
+    private volatile int connectionId;
 
-    public void setConnectionId(int connectionId) {
-    }
 }

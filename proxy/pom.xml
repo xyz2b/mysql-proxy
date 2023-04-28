@@ -17,5 +17,6 @@
     <modules>
         <module>frontend</module>
         <module>backend</module>
+        <module>spi</module>
     </modules>
 </project>

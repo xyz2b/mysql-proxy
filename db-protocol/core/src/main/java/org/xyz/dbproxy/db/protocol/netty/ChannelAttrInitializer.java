@@ -13,7 +13,7 @@ public final class ChannelAttrInitializer extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
-        // 设置channel的charset属性，使用JVM默认的charset，不设置的话默认跟随系统
+        // 设置channel的charset属性，使用JVM默认的charset，JMV没有设置的话默认跟随系统
         ctx.channel().attr(CommonConstants.CHARSET_ATTRIBUTE_KEY).setIfAbsent(Charset.defaultCharset());
         ctx.fireChannelActive();
     }

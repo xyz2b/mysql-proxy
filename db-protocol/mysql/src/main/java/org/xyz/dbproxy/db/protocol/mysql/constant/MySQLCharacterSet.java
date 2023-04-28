@@ -2,7 +2,7 @@ package org.xyz.dbproxy.db.protocol.mysql.constant;
 
 import lombok.Getter;
 import org.xyz.dbproxy.dialect.mysql.exception.UnknownCollationException;
-import org.xyz.dbproxy.infra.util.exception.ProxyPreconditions;
+import org.xyz.dbproxy.infra.util.exception.DbProxyPreconditions;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
@@ -317,8 +317,8 @@ public enum MySQLCharacterSet {
      */
     public static MySQLCharacterSet findById(final int id) {
         MySQLCharacterSet result = CHARACTER_SET_MAP.get(id);
-        ProxyPreconditions.checkNotNull(result, () -> new UnknownCollationException(id));
-        ProxyPreconditions.checkNotNull(result.getCharset(), () -> new UnknownCollationException(id));
+        DbProxyPreconditions.checkNotNull(result, () -> new UnknownCollationException(id));
+        DbProxyPreconditions.checkNotNull(result.getCharset(), () -> new UnknownCollationException(id));
         return result;
     }
 }

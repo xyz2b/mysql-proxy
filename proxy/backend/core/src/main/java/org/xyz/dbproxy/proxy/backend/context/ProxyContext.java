@@ -79,6 +79,8 @@ public final class ProxyContext {
      * @return instance state context
      */
     public Optional<InstanceStateContext> getInstanceStateContext() {
+        // Optional.ofNullable(T): 就是封装了T
+        // 该方式的入参可以为null，当入参不确定为非null时使用。
         return null == contextManager.getInstanceContext() ? Optional.empty() : Optional.ofNullable(contextManager.getInstanceContext().getInstance().getState());
     }
 }

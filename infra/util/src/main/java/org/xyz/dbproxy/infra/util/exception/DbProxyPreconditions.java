@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  * ShardingSphere preconditions.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ProxyPreconditions {
+public final class DbProxyPreconditions {
 
     /**
      * Ensures the truth of an expression involving the state of the calling instance.

@@ -26,6 +26,7 @@ public final class ServerHandlerInitializer extends ChannelInitializer<Channel> 
         // 通过SPI机制根据数据库类型，获取对应的DatabaseProtocolFrontendEngine，DatabaseProtocolFrontendEngine里面包含了对应数据库类型的DatabasePacketCodecEngine、AuthenticationEngine以及CommandExecuteEngine
         DatabaseProtocolFrontendEngine databaseProtocolFrontendEngine = TypedSPILoader.getService(DatabaseProtocolFrontendEngine.class, databaseType.getType());
         ChannelPipeline pipeline = socketChannel.pipeline();
+        // channel属性初始化器
         pipeline.addLast(new ChannelAttrInitializer());
         // 根据不同的数据库类型，来选择不同的编解码器
         pipeline.addLast(new PacketCodec(databaseProtocolFrontendEngine.getCodecEngine()));

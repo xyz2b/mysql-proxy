@@ -34,5 +34,11 @@
             <artifactId>dbproxy-mysql-protocol</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.xyz.dbproxy</groupId>
+            <artifactId>dbproxy-authority-core</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

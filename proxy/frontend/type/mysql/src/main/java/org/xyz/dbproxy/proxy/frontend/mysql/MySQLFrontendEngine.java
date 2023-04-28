@@ -5,12 +5,15 @@ import lombok.Getter;
 import org.xyz.dbproxy.db.protocol.codec.DatabasePacketCodecEngine;
 import org.xyz.dbproxy.db.protocol.mysql.codec.MySQLPacketCodecEngine;
 import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLConstants;
+import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLServerInfo;
+import org.xyz.dbproxy.db.protocol.mysql.netty.MySQLSequenceIDInboundHandler;
 import org.xyz.dbproxy.db.protocol.mysql.packet.MySQLPacket;
 import org.xyz.dbproxy.proxy.backend.session.ConnectionSession;
 import org.xyz.dbproxy.proxy.frontend.authentication.AuthenticationEngine;
 import org.xyz.dbproxy.proxy.frontend.command.CommandExecuteEngine;
 import org.xyz.dbproxy.proxy.frontend.mysql.authentication.MySQLAuthenticationEngine;
 import org.xyz.dbproxy.proxy.frontend.mysql.command.MySQLCommandExecuteEngine;
+import org.xyz.dbproxy.proxy.frontend.mysql.command.query.binary.MySQLStatementIDGenerator;
 import org.xyz.dbproxy.proxy.frontend.netty.FrontendChannelInboundHandler;
 import org.xyz.dbproxy.proxy.frontend.spi.DatabaseProtocolFrontendEngine;
 
@@ -33,6 +36,7 @@ public final class MySQLFrontendEngine implements DatabaseProtocolFrontendEngine
     public void initChannel(final Channel channel) {
         // channel对应的MYSQL_SEQUENCE_ID就是这里绑定上的
         channel.attr(MySQLConstants.MYSQL_SEQUENCE_ID).set(new AtomicInteger());
+        // channel对应的MYSQL_SEQUENCE_ID最新值，应该是客户端发来的报文的SEQUENCE_ID+1，所以每次接收到客户端报文之后，需要更新这个值
         channel.pipeline().addBefore(FrontendChannelInboundHandler.class.getSimpleName(), MySQLSequenceIDInboundHandler.class.getSimpleName(), new MySQLSequenceIDInboundHandler());
     }
 

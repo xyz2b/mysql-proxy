@@ -1,5 +1,6 @@
 package org.xyz.dbproxy.infra.database.type;
 
+import org.xyz.dbproxy.infra.database.metadata.DataSourceMetaData;
 import org.xyz.dbproxy.infra.util.spi.annotation.SingletonSPI;
 import org.xyz.dbproxy.infra.util.spi.type.typed.TypedSPI;
 

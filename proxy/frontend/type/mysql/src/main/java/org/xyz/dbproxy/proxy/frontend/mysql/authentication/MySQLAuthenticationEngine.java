@@ -5,11 +5,29 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.epoll.EpollDomainSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.xyz.dbproxy.authority.rule.AuthorityRule;
+import org.xyz.dbproxy.db.protocol.constant.CommonConstants;
+import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLCapabilityFlag;
+import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLCharacterSet;
+import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLConnectionPhase;
+import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLConstants;
+import org.xyz.dbproxy.db.protocol.mysql.packet.handshake.MySQLAuthenticationPluginData;
+import org.xyz.dbproxy.db.protocol.mysql.packet.handshake.MySQLHandshakePacket;
+import org.xyz.dbproxy.db.protocol.mysql.packet.handshake.MySQLHandshakeResponse41Packet;
+import org.xyz.dbproxy.db.protocol.mysql.payload.MySQLPacketPayload;
+import org.xyz.dbproxy.db.protocol.payload.PacketPayload;
+import org.xyz.dbproxy.infra.metadata.user.DbProxyUser;
+import org.xyz.dbproxy.infra.metadata.user.Grantee;
+import org.xyz.dbproxy.proxy.backend.context.ProxyContext;
 import org.xyz.dbproxy.proxy.frontend.authentication.AuthenticationEngine;
 import org.xyz.dbproxy.proxy.frontend.authentication.AuthenticationResult;
+import org.xyz.dbproxy.proxy.frontend.authentication.Authenticator;
+import org.xyz.dbproxy.proxy.frontend.connection.ConnectionIdGenerator;
+import org.xyz.dbproxy.proxy.frontend.mysql.command.query.binary.MySQLStatementIDGenerator;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
 /**
@@ -27,11 +45,15 @@ public final class MySQLAuthenticationEngine implements AuthenticationEngine {
 
     private AuthenticationResult currentAuthResult;
 
+    // https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_connection_phase.html#sect_protocol_connection_phase_initial_handshake
+    // 握手请求
     @Override
     public int handshake(final ChannelHandlerContext context) {
+        // 生成 连接ID（thread id）
         int result = ConnectionIdGenerator.getInstance().nextId();
         connectionPhase = MySQLConnectionPhase.AUTH_PHASE_FAST_PATH;
         context.writeAndFlush(new MySQLHandshakePacket(result, authPluginData));
+        // 给当前连接ID绑定一个SQL语句ID生成器
         MySQLStatementIDGenerator.getInstance().registerConnection(result);
         return result;
     }
@@ -76,7 +98,7 @@ public final class MySQLAuthenticationEngine implements AuthenticationEngine {
         }
         String username = handshakeResponsePacket.getUsername();
         String hostname = getHostAddress(context);
-        ShardingSphereUser user = rule.findUser(new Grantee(username, hostname)).orElseGet(() -> new ShardingSphereUser(username, "", hostname));
+        DbProxyUser user = rule.findUser(new Grantee(username, hostname)).orElseGet(() -> new ShardingSphereUser(username, "", hostname));
         Authenticator authenticator = new AuthenticatorFactory<>(MySQLAuthenticatorType.class, rule).newInstance(user);
         if (isClientPluginAuthenticate(handshakeResponsePacket) && !authenticator.getAuthenticationMethod().getMethodName().equals(handshakeResponsePacket.getAuthPluginName())) {
             connectionPhase = MySQLConnectionPhase.AUTHENTICATION_METHOD_MISMATCH;

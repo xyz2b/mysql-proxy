@@ -17,6 +17,8 @@
         <module>dialect-execption</module>
         <module>dialect-execption/core</module>
         <module>mode</module>
+        <module>kernel</module>
+        <module>kernel/authority/api</module>
     </modules>
 
     <properties>
