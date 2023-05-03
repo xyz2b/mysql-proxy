@@ -3,6 +3,8 @@ package org.xyz.dbproxy.authority.rule;
 import lombok.Getter;
 import org.xyz.dbproxy.authority.config.AuthorityRuleConfiguration;
 import org.xyz.dbproxy.authority.model.AuthorityRegistry;
+import org.xyz.dbproxy.authority.model.DbProxyPrivileges;
+import org.xyz.dbproxy.infra.metadata.database.DbProxyDatabase;
 import org.xyz.dbproxy.infra.metadata.user.DbProxyUser;
 import org.xyz.dbproxy.infra.metadata.user.Grantee;
 import org.xyz.dbproxy.infra.rule.identifier.scope.GlobalRule;
@@ -23,7 +25,7 @@ public final class AuthorityRule implements GlobalRule {
     // 权限配置（根据username@hostname找到其所具有的库表的相应权限，select insert等）
     private final AuthorityRegistry authorityRegistry;
 
-    public AuthorityRule(final AuthorityRuleConfiguration ruleConfig, final Map<String, ShardingSphereDatabase> databases) {
+    public AuthorityRule(final AuthorityRuleConfiguration ruleConfig, final Map<String, DbProxyDatabase> databases) {
         configuration = ruleConfig;
         AuthorityProvider provider = TypedSPILoader.getService(AuthorityProvider.class, ruleConfig.getAuthorityProvider().getType(), ruleConfig.getAuthorityProvider().getProps());
         authorityRegistry = provider.buildAuthorityRegistry(databases, ruleConfig.getUsers());
@@ -57,7 +59,7 @@ public final class AuthorityRule implements GlobalRule {
      * @param grantee grantee
      * @return found privileges
      */
-    public Optional<ShardingSpherePrivileges> findPrivileges(final Grantee grantee) {
+    public Optional<DbProxyPrivileges> findPrivileges(final Grantee grantee) {
         return authorityRegistry.findPrivileges(grantee);
     }
 

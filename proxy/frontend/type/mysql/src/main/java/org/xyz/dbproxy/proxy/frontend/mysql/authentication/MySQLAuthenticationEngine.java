@@ -7,22 +7,17 @@ import io.netty.channel.epoll.EpollDomainSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.xyz.dbproxy.authority.rule.AuthorityRule;
 import org.xyz.dbproxy.db.protocol.constant.CommonConstants;
-import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLCapabilityFlag;
-import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLCharacterSet;
-import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLConnectionPhase;
-import org.xyz.dbproxy.db.protocol.mysql.constant.MySQLConstants;
-import org.xyz.dbproxy.db.protocol.mysql.packet.handshake.MySQLAuthenticationPluginData;
-import org.xyz.dbproxy.db.protocol.mysql.packet.handshake.MySQLHandshakePacket;
-import org.xyz.dbproxy.db.protocol.mysql.packet.handshake.MySQLHandshakeResponse41Packet;
+import org.xyz.dbproxy.db.protocol.mysql.constant.*;
+import org.xyz.dbproxy.db.protocol.mysql.packet.generic.MySQLOKPacket;
+import org.xyz.dbproxy.db.protocol.mysql.packet.handshake.*;
 import org.xyz.dbproxy.db.protocol.mysql.payload.MySQLPacketPayload;
 import org.xyz.dbproxy.db.protocol.payload.PacketPayload;
 import org.xyz.dbproxy.infra.metadata.user.DbProxyUser;
 import org.xyz.dbproxy.infra.metadata.user.Grantee;
 import org.xyz.dbproxy.proxy.backend.context.ProxyContext;
-import org.xyz.dbproxy.proxy.frontend.authentication.AuthenticationEngine;
-import org.xyz.dbproxy.proxy.frontend.authentication.AuthenticationResult;
-import org.xyz.dbproxy.proxy.frontend.authentication.Authenticator;
+import org.xyz.dbproxy.proxy.frontend.authentication.*;
 import org.xyz.dbproxy.proxy.frontend.connection.ConnectionIdGenerator;
+import org.xyz.dbproxy.proxy.frontend.mysql.authentication.authenticator.MySQLAuthenticatorType;
 import org.xyz.dbproxy.proxy.frontend.mysql.command.query.binary.MySQLStatementIDGenerator;
 
 import java.net.InetSocketAddress;
@@ -61,12 +56,12 @@ public final class MySQLAuthenticationEngine implements AuthenticationEngine {
     @Override
     public AuthenticationResult authenticate(final ChannelHandlerContext context, final PacketPayload payload) {
         AuthorityRule rule = ProxyContext.getInstance().getContextManager().getMetaDataContexts().getMetaData().getGlobalRuleMetaData().getSingleRule(AuthorityRule.class);
-        if (MySQLConnectionPhase.AUTH_PHASE_FAST_PATH == connectionPhase) {
+        if (MySQLConnectionPhase.AUTH_PHASE_FAST_PATH == connectionPhase) { // 当前阶段处于MySQLConnectionPhase.AUTH_PHASE_FAST_PATH，解析MySQLHandshakeResponse41Packet
             currentAuthResult = authenticatePhaseFastPath(context, payload, rule);
             if (!currentAuthResult.isFinished()) {
                 return currentAuthResult;
             }
-        } else if (MySQLConnectionPhase.AUTHENTICATION_METHOD_MISMATCH == connectionPhase) {
+        } else if (MySQLConnectionPhase.AUTHENTICATION_METHOD_MISMATCH == connectionPhase) {    // 当前阶段处于MySQLConnectionPhase.AUTHENTICATION_METHOD_MISMATCH，解析MySQLAuthSwitchResponsePacket
             authenticateMismatchedMethod((MySQLPacketPayload) payload);
         }
         Grantee grantee = new Grantee(currentAuthResult.getUsername(), getHostAddress(context));
@@ -83,6 +78,7 @@ public final class MySQLAuthenticationEngine implements AuthenticationEngine {
     private AuthenticationResult authenticatePhaseFastPath(final ChannelHandlerContext context, final PacketPayload payload, final AuthorityRule rule) {
         MySQLHandshakeResponse41Packet handshakeResponsePacket;
         try {
+            // 解析握手包响应
             handshakeResponsePacket = new MySQLHandshakeResponse41Packet((MySQLPacketPayload) payload);
         } catch (IndexOutOfBoundsException ex) {
             if (log.isWarnEnabled()) {
@@ -98,8 +94,12 @@ public final class MySQLAuthenticationEngine implements AuthenticationEngine {
         }
         String username = handshakeResponsePacket.getUsername();
         String hostname = getHostAddress(context);
-        DbProxyUser user = rule.findUser(new Grantee(username, hostname)).orElseGet(() -> new ShardingSphereUser(username, "", hostname));
+        // 当optional值不存在时，调用orElseGet()中接口调用的返回值，如果optional的值存在时返回optional的值
+        // 在已授权的用户中找寻是否有当前用户，没有的话就生成一个DbProxyUser实例
+        DbProxyUser user = rule.findUser(new Grantee(username, hostname)).orElseGet(() -> new DbProxyUser(username, "", hostname));
+        // 使用认证器工厂实例化认证器，MySQLAuthenticator，这里针对MYSQL就实现了两种Authentication Methods的认证器，Native Authentication和Clear text client plugin(明文)，MYSQL5.6之后默认使用Native Authentication
         Authenticator authenticator = new AuthenticatorFactory<>(MySQLAuthenticatorType.class, rule).newInstance(user);
+        // 如果服务器的用户密码加密方式和客户端使用的auth plugin不同，就需要让client切换加密插件，进入MySQLConnectionPhase.AUTHENTICATION_METHOD_MISMATCH阶段，发送MySQLAuthSwitchRequestPacket
         if (isClientPluginAuthenticate(handshakeResponsePacket) && !authenticator.getAuthenticationMethod().getMethodName().equals(handshakeResponsePacket.getAuthPluginName())) {
             connectionPhase = MySQLConnectionPhase.AUTHENTICATION_METHOD_MISMATCH;
             context.writeAndFlush(new MySQLAuthSwitchRequestPacket(authenticator.getAuthenticationMethod().getMethodName(), authPluginData));
@@ -123,12 +123,14 @@ public final class MySQLAuthenticationEngine implements AuthenticationEngine {
     }
 
     private boolean login(final AuthorityRule rule, final Grantee grantee, final byte[] authenticationResponse) {
-        Optional<ShardingSphereUser> user = rule.findUser(grantee);
+        Optional<DbProxyUser> user = rule.findUser(grantee);
+        // 这里才真正调用认证器的authenticate方法校验密码是否争取
         return user.isPresent()
                 && new AuthenticatorFactory<>(MySQLAuthenticatorType.class, rule).newInstance(user.get()).authenticate(user.get(), new Object[]{authenticationResponse, authPluginData});
     }
 
     private boolean authorizeDatabase(final AuthorityRule rule, final Grantee grantee, final String databaseName) {
+        // 验证对应的用户是否有访问database的权限
         return null == databaseName || new AuthorityChecker(rule, grantee).isAuthorized(databaseName);
     }
 

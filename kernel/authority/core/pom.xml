@@ -16,6 +16,12 @@
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.xyz.dbproxy</groupId>
+            <artifactId>dbproxy-sql-parser-statement</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <parent>
