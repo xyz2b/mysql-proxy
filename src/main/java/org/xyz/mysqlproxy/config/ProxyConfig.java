@@ -15,4 +15,10 @@ public class ProxyConfig {
 
     @Value("${proxy.default-auth-plugin}")
     private String defaultAuthPlugin;
+
+    @Value("${proxy.backend.ip}")
+    private String backendIp;
+
+    @Value("${proxy.backend.port}")
+    private int backendPort;
 }

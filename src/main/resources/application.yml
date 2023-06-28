@@ -6,6 +6,10 @@ proxy:
   ip: 127.0.0.1
   port: 9999
   default-auth-plugin: mysql_native_password
+  backend:
+    ip: 127.0.0.1
+    port: 3306
+
 
 logging:
   config: classpath:log4j2.xml

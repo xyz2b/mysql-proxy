@@ -21,6 +21,7 @@ import org.xyz.mysqlproxy.config.ProxyConfig;
 import org.xyz.mysqlproxy.net.handler.factory.FrontHandlerFactory;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 @Data
 @Slf4j
